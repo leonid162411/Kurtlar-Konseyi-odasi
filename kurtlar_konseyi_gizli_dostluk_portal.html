@@ -1,0 +1,3107 @@
+<!DOCTYPE html>
+<html lang="tr" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KURTLAR KONSEYİ | Baron & Gizli Dostluk Portalı</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Cinzel (Dramatik Başlıklar) & Inter (Okunabilirlik) -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Tone.js for Sound Effects -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+    <!-- PeerJS for Real-Time P2P Voice Chat (WebRTC) -->
+    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        cinzel: ['Cinzel', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        council: {
+                            black: '#060608',
+                            dark: '#0e1015',
+                            card: '#151821',
+                            gold: '#d4af37',
+                            goldLight: '#f3e5ab',
+                            crimson: '#8b0000',
+                            blood: '#dc2626',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #060608;
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(139, 0, 0, 0.18) 0%, transparent 65%),
+                radial-gradient(circle at 85% 95%, rgba(212, 175, 55, 0.08) 0%, transparent 50%);
+            color: #e2e8f0;
+            overflow-x: hidden;
+        }
+
+        .gold-border {
+            border: 1px solid rgba(212, 175, 55, 0.28);
+            box-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.75), inset 0 0 14px rgba(212, 175, 55, 0.04);
+        }
+        .gold-border:hover {
+            border-color: rgba(212, 175, 55, 0.55);
+        }
+
+        .baron-border {
+            border: 1px solid rgba(212, 175, 55, 0.65);
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.15), inset 0 0 15px rgba(212, 175, 55, 0.08);
+        }
+
+        .crimson-glow {
+            box-shadow: 0 0 22px rgba(185, 28, 28, 0.4);
+        }
+
+        .gold-gradient-text {
+            background: linear-gradient(135deg, #fff5cc 0%, #d4af37 50%, #997a15 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #060608;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #332a15;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #d4af37;
+        }
+
+        @keyframes pulseSlow {
+            0%, 100% { transform: scale(1); opacity: 0.92; }
+            50% { transform: scale(1.04); opacity: 1; }
+        }
+        .animate-crest {
+            animation: pulseSlow 4s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans selection:bg-council-crimson selection:text-white">
+
+    <!-- ==================== 1. KİŞİYE ÖZEL ŞİFRELİ GİRİŞ EKRANI ==================== -->
+    <div id="gateScreen" class="fixed inset-0 z-50 bg-council-black flex flex-col items-center justify-center p-4 overflow-y-auto" style="background-image: radial-gradient(circle at center, #1b0c0c 0%, #060608 75%);">
+        <div class="max-w-md w-full bg-council-dark/95 backdrop-blur-xl p-6 sm:p-8 rounded-2xl gold-border text-center relative my-auto">
+            <!-- Köşe Süslemeleri -->
+            <div class="absolute top-0 left-0 w-12 h-12 border-t-2 border-l-2 border-council-gold/40 rounded-tl-2xl pointer-events-none"></div>
+            <div class="absolute top-0 right-0 w-12 h-12 border-t-2 border-r-2 border-council-gold/40 rounded-tr-2xl pointer-events-none"></div>
+            <div class="absolute bottom-0 left-0 w-12 h-12 border-b-2 border-l-2 border-council-gold/40 rounded-bl-2xl pointer-events-none"></div>
+            <div class="absolute bottom-0 right-0 w-12 h-12 border-b-2 border-r-2 border-council-gold/40 rounded-br-2xl pointer-events-none"></div>
+
+            <!-- Kurtlar Konseyi Amblemi -->
+            <div class="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-b from-council-crimson/40 to-black flex items-center justify-center border-2 border-council-gold shadow-lg shadow-council-crimson/20 animate-crest">
+                <svg class="w-12 h-12 text-council-gold" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2L9 7L4 5L6 11L3 14L7 17L6 22L12 19L18 22L17 17L21 14L18 11L20 5L15 7L12 2ZM12 6.5L13.8 9.5L16.5 8.5L15.5 11.5L17.5 13.5L14.8 15L15.2 17.8L12 16.2L8.8 17.8L9.2 15L6.5 13.5L8.5 11.5L7.5 8.5L10.2 9.5L12 6.5Z"/>
+                    <circle cx="10" cy="12" r="1.2" fill="#dc2626"/>
+                    <circle cx="14" cy="12" r="1.2" fill="#dc2626"/>
+                </svg>
+            </div>
+
+            <h1 class="font-cinzel text-2xl sm:text-3xl font-black tracking-wider gold-gradient-text mb-1">KURTLAR KONSEYİ</h1>
+            <p class="text-[11px] uppercase tracking-[0.25em] text-red-500 font-semibold mb-6">Kişiye Özel Şifreli Konsey Girişi</p>
+
+            <!-- Giriş Formu -->
+            <form id="loginForm" class="space-y-4 text-left">
+                <div>
+                    <label class="block text-xs uppercase tracking-wider text-gray-400 mb-1.5 font-semibold">Konsey Kod Adı (İsim)</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-council-gold">
+                            <i class="fa-solid fa-user-secret"></i>
+                        </span>
+                        <input id="loginUsername" type="text" required placeholder="Örn: Kaptan, Heisenberg..." autocomplete="off"
+                            class="w-full pl-10 pr-4 py-2.5 bg-black/80 border border-gray-700 focus:border-council-gold rounded-xl text-sm text-white outline-none transition">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs uppercase tracking-wider text-gray-400 mb-1.5 font-semibold">Kişisel Gizli Şifre</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-council-gold">
+                            <i class="fa-solid fa-key"></i>
+                        </span>
+                        <input id="loginPassword" type="password" required placeholder="Kişisel şifrenizi girin..." 
+                            class="w-full pl-10 pr-10 py-2.5 bg-black/80 border border-gray-700 focus:border-council-gold rounded-xl text-sm text-white outline-none transition">
+                        <button type="button" onclick="toggleLoginPassVisibility()" class="absolute inset-y-0 right-0 flex items-center pr-3.5 text-gray-500 hover:text-council-gold">
+                            <i id="loginPassEye" class="fa-solid fa-eye text-xs"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Hata Mesajı -->
+                <div id="gateError" class="hidden p-3 rounded-xl bg-red-950/80 border border-red-700/70 text-xs text-red-200 flex items-center gap-2">
+                    <i class="fa-solid fa-triangle-exclamation text-red-400 text-sm shrink-0"></i>
+                    <span id="gateErrorText">İsim veya şifre hatalı! Konsey kayıtlarında eşleşmedi.</span>
+                </div>
+
+                <button type="submit" class="w-full py-3 bg-gradient-to-r from-red-900 via-red-700 to-red-900 hover:from-red-800 hover:to-red-600 text-white font-cinzel font-bold tracking-widest rounded-xl border border-council-gold/50 shadow-lg crimson-glow transition transform active:scale-95 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-door-open text-council-gold"></i> KİMLİĞİ DOĞRULA & GİR
+                </button>
+            </form>
+
+            <!-- Konsey Üyeleri Listesi (Sadece İsim Seçimi - Şifreler Gizli) -->
+            <div class="mt-6 pt-4 border-t border-gray-800/90 text-left">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-[11px] text-council-gold font-semibold uppercase tracking-wider flex items-center gap-1.5">
+                        <i class="fa-solid fa-users"></i> Kayıtlı Konsey Üyeleri (İsim Seç):
+                    </span>
+                    <span class="text-[10px] text-gray-500"><i class="fa-solid fa-lock text-red-500 mr-1"></i>Şifreler Baron'dadır</span>
+                </div>
+                <div id="loginHelperAccounts" class="grid grid-cols-2 gap-2">
+                    <!-- JS ile sadece üye isimleri buraya gelir, şifreler asla gösterilmez -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== ANA PORTAL EKRANI ==================== -->
+    <div id="mainPortal" class="flex-1 flex flex-col hidden">
+        
+        <!-- ÜST BAR (HEADER) -->
+        <header class="sticky top-0 z-30 bg-council-black/95 backdrop-blur-md border-b border-council-gold/25 px-4 lg:px-8 py-3">
+            <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+                <!-- Sol: Logo & Başlık -->
+                <div class="flex items-center gap-3">
+                    <div class="w-11 h-11 rounded-full bg-gradient-to-br from-red-900 to-black border border-council-gold flex items-center justify-center shadow-md shrink-0">
+                        <i class="fa-solid fa-chess-king text-council-gold text-xl"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <h1 class="font-cinzel text-lg sm:text-2xl font-bold gold-gradient-text tracking-wide">KURTLAR KONSEYİ</h1>
+                            <span id="dbStatusBadge" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-950/90 text-emerald-400 border border-emerald-700/50">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> 💾 Kayıtlı & Senkronize
+                            </span>
+                        </div>
+                        <p class="text-[11px] text-gray-400 hidden sm:block">"Konseyde son sözü Baron söyler, tüm kararlar mühürlenir."</p>
+                    </div>
+                </div>
+
+                <!-- Sağ: Aktif Kullanıcı Rozeti & Çıkış -->
+                <div class="flex items-center gap-2 sm:gap-3">
+                    <!-- Ses Efektleri -->
+                    <button id="soundToggleBtn" onclick="toggleSound()" class="p-2.5 rounded-xl bg-council-card border border-gray-800 hover:border-council-gold/50 text-council-gold text-xs transition" title="Ses Efektleri">
+                        <i id="soundIcon" class="fa-solid fa-volume-high"></i>
+                    </button>
+
+                    <!-- Aktif Kullanıcı & Yetki Rozeti -->
+                    <div class="flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-council-card gold-border">
+                        <div id="headerUserAvatar" class="w-8 h-8 rounded-lg bg-red-950 border border-council-gold/60 flex items-center justify-center text-sm">
+                            👑
+                        </div>
+                        <div class="text-left">
+                            <div class="flex items-center gap-1.5">
+                                <p id="activeUserName" class="text-xs font-bold text-white leading-none">Kaptan</p>
+                                <span id="activeRoleBadge" class="px-1.5 py-0.5 text-[9px] font-black uppercase rounded bg-council-gold text-black">BARON</span>
+                            </div>
+                            <p id="activeUserRank" class="text-[10px] text-gray-400 leading-tight mt-0.5">Konsey Baronu</p>
+                        </div>
+                    </div>
+
+                    <!-- Çıkış Yap (Masadan Kalk) -->
+                    <button onclick="logoutCouncil()" class="px-3 py-2 rounded-xl bg-red-950/70 hover:bg-red-900 border border-red-800/60 text-xs text-red-200 font-semibold transition flex items-center gap-1.5" title="Oturumu Kapat">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                        <span class="hidden sm:inline">Masadan Kalk</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- BARONUN GÜNCEL FERMANI BANNER -->
+        <section class="max-w-7xl w-full mx-auto px-4 lg:px-8 pt-5 pb-1">
+            <div class="relative rounded-2xl bg-gradient-to-r from-council-dark via-[#1b0b0b] to-council-dark p-4 sm:p-5 gold-border overflow-hidden">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-council-gold">
+                            <i class="fa-solid fa-scroll text-red-500"></i> BARON'UN GÜNCEL FERMANI (DUYURU)
+                        </div>
+                        <p id="baronDecreeText" class="text-sm sm:text-base text-white font-medium italic">
+                            "Kurtlar Konseyi'nde dostluk mezara kadardır. Bu akşam herkes saatinde masada hazır olacak!"
+                        </p>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-2 shrink-0">
+                        <!-- Sadece Baron Ferman Değiştirebilir -->
+                        <button id="editDecreeBtn" onclick="openModal('decreeModal')" class="hidden px-3.5 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-council-gold text-council-gold text-xs font-bold transition items-center gap-1.5">
+                            <i class="fa-solid fa-pen-nib"></i> Fermanı Değiştir
+                        </button>
+                        <button onclick="openModal('codeExportModal')" class="px-3.5 py-2 rounded-xl bg-council-card hover:bg-gray-800 border border-council-gold/40 text-council-gold text-xs font-bold transition flex items-center gap-1.5" title="HTML, CSS ve JS dosyalarını ayrı ayrı indir">
+                            <i class="fa-solid fa-folder-tree"></i> Kodları Ayır (HTML/CSS/JS)
+                        </button>
+                        <button onclick="triggerEmergencyGavel()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-red-800 to-red-950 hover:from-red-700 hover:to-red-900 text-white border border-red-500/40 text-xs font-bold tracking-wider transition flex items-center gap-2 shadow-lg">
+                            <i class="fa-solid fa-gavel text-council-gold"></i> TOKMAĞI VUR!
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ÇOKLU SAYFA NAVİGASYON MENÜSÜ (6 FARKLI SAYFA) -->
+        <nav class="max-w-7xl w-full mx-auto px-4 lg:px-8 mt-4">
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 bg-council-dark/95 p-1.5 rounded-2xl border border-gray-800">
+                <button onclick="switchPage('masa')" id="navBtn-masa" class="nav-btn py-3 px-2.5 rounded-xl font-cinzel text-xs font-bold transition flex items-center justify-center gap-1.5 bg-gradient-to-r from-red-950 via-red-900/80 to-red-950 text-council-gold border border-council-gold/50 shadow-md">
+                    <i class="fa-solid fa-users-viewfinder"></i>
+                    <span>1. Konsey Masası</span>
+                </button>
+
+                <button onclick="switchPage('oylama')" id="navBtn-oylama" class="nav-btn py-3 px-2.5 rounded-xl font-cinzel text-xs font-bold transition flex items-center justify-center gap-1.5 text-gray-400 hover:text-white hover:bg-white/5">
+                    <i class="fa-solid fa-scale-balanced"></i>
+                    <span>2. Oylama</span>
+                </button>
+
+                <button onclick="switchPage('racon')" id="navBtn-racon" class="nav-btn py-3 px-2.5 rounded-xl font-cinzel text-xs font-bold transition flex items-center justify-center gap-1.5 text-gray-400 hover:text-white hover:bg-white/5">
+                    <i class="fa-solid fa-skull-crossbones"></i>
+                    <span>3. Racon & Ceza</span>
+                </button>
+
+                <button onclick="switchPage('sohbet')" id="navBtn-sohbet" class="nav-btn py-3 px-2.5 rounded-xl font-cinzel text-xs font-bold transition flex items-center justify-center gap-1.5 text-gray-400 hover:text-white hover:bg-white/5">
+                    <i class="fa-solid fa-walkie-talkie"></i>
+                    <span>4. Gizli Hat & Telsiz</span>
+                </button>
+
+                <button onclick="switchPage('dedektif')" id="navBtn-dedektif" class="nav-btn py-3 px-2.5 rounded-xl font-cinzel text-xs font-bold transition flex items-center justify-center gap-1.5 text-gray-400 hover:text-white hover:bg-white/5">
+                    <i class="fa-solid fa-user-secret"></i>
+                    <span>5. Dedektiflik</span>
+                </button>
+
+                <button onclick="switchPage('baron')" id="navBtn-baron" class="nav-btn py-3 px-2.5 rounded-xl font-cinzel text-xs font-bold transition flex items-center justify-center gap-1.5 text-gray-400 hover:text-white hover:bg-white/5">
+                    <i class="fa-solid fa-crown text-council-gold"></i>
+                    <span>6. Baron Odası</span>
+                    <i id="baronLockIcon" class="fa-solid fa-lock text-[10px] ml-0.5 text-red-400"></i>
+                </button>
+            </div>
+        </nav>
+
+        <!-- ANA İÇERİK ALANI -->
+        <main class="max-w-7xl w-full mx-auto px-4 lg:px-8 py-6 flex-1">
+
+            <!-- SAYFA 1: KONSEY MASASI -->
+            <div id="page-masa" class="page-view space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-800 pb-4">
+                    <div>
+                        <h2 class="font-cinzel text-xl sm:text-2xl font-bold text-council-gold flex items-center gap-2">
+                            <i class="fa-solid fa-chess-king text-red-500"></i> Kurtlar Konseyi Üyeleri & Sadakat Tablosu
+                        </h2>
+                        <p class="text-xs text-gray-400">Masadaki aktif konsey üyeleri, rütbeleri ve sadakat oranları.</p>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-2">
+                        <button onclick="openStatusModal()" class="px-4 py-2 rounded-xl bg-council-card hover:bg-gray-800 border border-council-gold/50 text-council-gold text-xs font-bold transition flex items-center gap-2">
+                            <i class="fa-solid fa-pen-to-square"></i> Durumumu Güncelle
+                        </button>
+                        <button id="masaBaronAddBtn" onclick="switchPage('baron')" class="hidden px-4 py-2 rounded-xl bg-gradient-to-r from-amber-600 to-yellow-500 hover:from-amber-500 hover:to-yellow-400 text-black font-bold text-xs uppercase tracking-wider transition items-center gap-2 shadow-lg">
+                            <i class="fa-solid fa-user-plus"></i> Yeni Üye / Şifre Ekle
+                        </button>
+                    </div>
+                </div>
+                <div id="membersGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+            </div>
+
+            <!-- SAYFA 2: OYLAMA ODASI -->
+            <div id="page-oylama" class="page-view hidden space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-800 pb-4">
+                    <div>
+                        <h2 class="font-cinzel text-xl sm:text-2xl font-bold text-council-gold flex items-center gap-2">
+                            <i class="fa-solid fa-scale-balanced text-red-500"></i> Konsey İnfaz & Karar Oylamaları
+                        </h2>
+                        <p class="text-xs text-gray-400">Oyun saatleri, buluşmalar ve cezalar burada oylanır ve mühürlenir.</p>
+                    </div>
+                    <button onclick="openModal('pollModal')" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-red-800 to-red-700 hover:from-red-700 hover:to-red-600 text-white font-cinzel font-bold text-xs uppercase tracking-wider transition flex items-center gap-2 shadow-lg">
+                        <i class="fa-solid fa-gavel text-council-gold"></i> Yeni Oylama Aç
+                    </button>
+                </div>
+                <div id="pollsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-5"></div>
+            </div>
+
+            <!-- SAYFA 3: RACON & CEZA -->
+            <div id="page-racon" class="page-view hidden space-y-6">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Sol: Racon Anayasası -->
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between border-b border-gray-800 pb-3">
+                            <div>
+                                <h3 class="font-cinzel text-lg font-bold text-council-gold flex items-center gap-2">
+                                    <i class="fa-solid fa-scroll text-red-500"></i> Konsey Anayasası & Racon Sözleri
+                                </h3>
+                                <p class="text-xs text-gray-400">Grubun unutulmaz raconları ve değişmez kuralları.</p>
+                            </div>
+                            <div class="flex items-center gap-1.5">
+                                <button id="aiGenerateRaconBtn" onclick="generateAiRaconQuote()" class="px-3 py-2 rounded-xl bg-purple-950/80 hover:bg-purple-900 border border-purple-500/50 text-purple-200 font-bold text-xs transition flex items-center gap-1.5" title="Gemini AI ile Racon Sözü Üret">
+                                    <i class="fa-solid fa-wand-magic-sparkles text-council-gold"></i> ✨ AI Racon
+                                </button>
+                                <button onclick="openModal('quoteModal')" class="px-3.5 py-2 rounded-xl bg-amber-600/20 hover:bg-amber-600/30 border border-council-gold text-council-gold font-bold text-xs transition flex items-center gap-1.5">
+                                    <i class="fa-solid fa-plus"></i> Racon Ekle
+                                </button>
+                            </div>
+                        </div>
+                        <div id="quotesGrid" class="space-y-3"></div>
+                    </div>
+
+                    <!-- Sağ: Kara Liste & Cezalar -->
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between border-b border-gray-800 pb-3">
+                            <div>
+                                <h3 class="font-cinzel text-lg font-bold text-red-500 flex items-center gap-2">
+                                    <i class="fa-solid fa-skull-crossbones"></i> Kara Liste & Kesilen Cezalar
+                                </h3>
+                                <p class="text-xs text-gray-400">Satış koyanlar, AFK kalanlar ve hesap ısmarlama cezaları.</p>
+                            </div>
+                            <button onclick="openModal('bountyModal')" class="px-3.5 py-2 rounded-xl bg-red-900/60 hover:bg-red-800 border border-red-600/50 text-white font-bold text-xs transition flex items-center gap-1.5">
+                                <i class="fa-solid fa-crosshairs"></i> Ceza Kes
+                            </button>
+                        </div>
+                        <div id="bountiesGrid" class="space-y-3"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SAYFA 4: GİZLİ KONSEY HATTI (SESLİ TELSİZ & SOHBET ODASI) -->
+            <div id="page-sohbet" class="page-view hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    
+                    <!-- SOL (1 Sütun): ŞİFRELİ SESLİ KONUŞMA & TELSİZ ODASI (WebRTC) -->
+                    <div class="bg-council-card rounded-2xl baron-border p-5 flex flex-col justify-between space-y-4 h-fit lg:h-[560px]">
+                        <div class="space-y-4">
+                            <!-- Başlık -->
+                            <div class="flex items-center justify-between border-b border-gray-800 pb-3">
+                                <div class="flex items-center gap-2.5">
+                                    <div id="voicePulseIndicator" class="w-10 h-10 rounded-xl bg-red-950 border border-council-gold/60 flex items-center justify-center text-council-gold text-lg">
+                                        <i class="fa-solid fa-headset"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-cinzel text-base font-bold text-council-gold">Şifreli Sesli Telsiz</h3>
+                                        <p id="voiceStatusText" class="text-[11px] text-gray-400">Bağlantı bekleniyor...</p>
+                                    </div>
+                                </div>
+                                <span id="voiceLiveBadge" class="hidden px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase bg-emerald-950 text-emerald-400 border border-emerald-600 animate-pulse">
+                                    CANLI HAT
+                                </span>
+                            </div>
+
+                            <!-- 1. Senin Telsiz Frekans Kodun -->
+                            <div class="p-3.5 rounded-xl bg-black/80 border border-gray-800 space-y-2">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-[11px] font-bold uppercase tracking-wider text-gray-400">Senin Telsiz Frekans Kodun:</span>
+                                    <button onclick="copyMyVoiceId()" class="text-[11px] text-council-gold hover:underline flex items-center gap-1">
+                                        <i class="fa-regular fa-copy"></i> Kodu Kopyala
+                                    </button>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <input id="myPeerIdDisplay" type="text" readonly value="Frekans hazırlanıyor..." 
+                                        class="w-full px-3 py-2 rounded-lg bg-council-dark border border-council-gold/40 text-council-gold font-mono text-xs font-bold outline-none">
+                                    <button onclick="shareMyFreqToChat()" class="px-3 py-2 rounded-lg bg-amber-600/20 hover:bg-amber-600/30 border border-council-gold/50 text-council-gold text-xs font-bold shrink-0 transition" title="Frekans kodunu sohbete gönder">
+                                        <i class="fa-solid fa-share-nodes"></i> Sohbete At
+                                    </button>
+                                </div>
+                                <p class="text-[10px] text-gray-500">Arkadaşınla sesli konuşmak için bu kodu ona ver veya onun kodunu aşağıya yazıp bağlan!</p>
+                            </div>
+
+                            <!-- 2. Arkadaşının Frekansına Bağlan -->
+                            <div class="p-3.5 rounded-xl bg-black/80 border border-gray-800 space-y-2.5">
+                                <label class="block text-[11px] font-bold uppercase tracking-wider text-gray-400">Arkadaşının Frekansına Bağlan:</label>
+                                <div class="flex items-center gap-2">
+                                    <input id="remotePeerIdInput" type="text" placeholder="Örn: KK-HEISENBERG-482" 
+                                        class="w-full px-3 py-2 rounded-lg bg-council-dark border border-gray-700 focus:border-council-gold text-white font-mono text-xs outline-none">
+                                    <button id="callPeerBtn" onclick="connectVoiceCall()" class="px-4 py-2 rounded-lg bg-gradient-to-r from-emerald-700 to-emerald-600 hover:from-emerald-600 hover:to-emerald-500 text-white font-bold text-xs shrink-0 transition flex items-center gap-1.5 shadow-lg">
+                                        <i class="fa-solid fa-phone-volume"></i> Ara
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- 3. Ses Seviyesi Göstergesi & Aktif Konuşanlar -->
+                            <div class="p-3.5 rounded-xl bg-black/60 border border-gray-800 space-y-3">
+                                <div class="flex items-center justify-between text-xs">
+                                    <span class="text-gray-400 font-semibold"><i class="fa-solid fa-wave-square text-council-gold mr-1"></i> Mikrofon Sinyali</span>
+                                    <span id="micStateLabel" class="text-[11px] text-gray-500">Kapalı</span>
+                                </div>
+                                <div class="w-full h-2.5 rounded-full bg-gray-900 overflow-hidden border border-gray-800">
+                                    <div id="micLevelBar" class="h-full bg-gradient-to-r from-emerald-500 via-amber-400 to-red-500 transition-all duration-75" style="width: 0%"></div>
+                                </div>
+
+                                <!-- Bağlı Kişiler Listesi -->
+                                <div id="voiceParticipantsList" class="space-y-1.5 pt-1 max-h-28 overflow-y-auto">
+                                    <p class="text-[11px] text-gray-500 italic">Henüz aktif sesli bağlantı yok.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Alt Kontroller: Mikrofon Aç/Kapat & Aramayı Sonlandır -->
+                        <div class="grid grid-cols-2 gap-2 pt-3 border-t border-gray-800">
+                            <button id="toggleMuteBtn" onclick="toggleMicrophoneMute()" disabled class="py-2.5 px-3 rounded-xl bg-gray-800 disabled:opacity-40 text-white font-bold text-xs transition flex items-center justify-center gap-2">
+                                <i id="muteBtnIcon" class="fa-solid fa-microphone"></i>
+                                <span id="muteBtnText">Sesi Kapat</span>
+                            </button>
+                            <button id="endCallBtn" onclick="disconnectVoiceCall()" disabled class="py-2.5 px-3 rounded-xl bg-red-900/80 hover:bg-red-700 disabled:opacity-40 text-red-100 font-bold text-xs transition flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-phone-slash"></i>
+                                <span>Hattı Kes</span>
+                            </button>
+                        </div>
+
+                        <!-- Gelen Arama Bildirim Kutusu -->
+                        <div id="incomingCallModal" class="hidden p-3.5 rounded-xl bg-amber-950/90 border-2 border-council-gold space-y-2.5 animate-pulse">
+                            <div class="flex items-center gap-2 text-xs font-bold text-council-gold">
+                                <i class="fa-solid fa-bell"></i> GELEN TELSİZ ÇAĞRISI: <span id="incomingCallerId" class="text-white font-mono"></span>
+                            </div>
+                            <div class="grid grid-cols-2 gap-2">
+                                <button onclick="acceptIncomingCall()" class="py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-black font-bold text-xs">
+                                    <i class="fa-solid fa-check mr-1"></i> Bağlan
+                                </button>
+                                <button onclick="rejectIncomingCall()" class="py-1.5 rounded-lg bg-red-800 hover:bg-red-700 text-white font-bold text-xs">
+                                    <i class="fa-solid fa-xmark mr-1"></i> Reddet
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Gizli Ses Oynatıcı -->
+                        <audio id="remoteAudioPlayer" autoplay playsinline class="hidden"></audio>
+                    </div>
+
+                    <!-- SAĞ (2 Sütun): YAZILI ŞİFRELİ SOHBET ODASI -->
+                    <div class="lg:col-span-2 bg-council-card rounded-2xl gold-border overflow-hidden flex flex-col h-[560px]">
+                        <!-- Sohbet Üst Başlık -->
+                        <div class="p-4 bg-black/60 border-b border-gray-800 flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="w-9 h-9 rounded-xl bg-red-950 border border-council-gold/50 flex items-center justify-center text-council-gold">
+                                    <i class="fa-solid fa-shield-halved"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-cinzel text-base font-bold text-white">Şifreli Konsey Yazışma Hattı</h3>
+                                    <p class="text-[11px] text-gray-400">Sol panelden telsizle sesli konuşurken buradan yazılı mesaj ve frekans kodu paylaşabilirsin.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button id="askConsigliereBtn" onclick="askAiConsigliereFromChat()" class="px-3 py-1.5 rounded-lg bg-gradient-to-r from-purple-900 to-indigo-900 hover:from-purple-800 hover:to-indigo-800 text-amber-200 border border-council-gold/50 text-xs font-bold transition flex items-center gap-1.5 shadow-md" title="Gemini AI Başmüşavire Strateji Sor">
+                                    <i class="fa-solid fa-brain text-council-gold"></i> ✨ Başmüşavir AI'a Danış
+                                </button>
+                                <button id="clearChatBtn" onclick="clearAllChat()" class="hidden px-3 py-1.5 rounded-lg bg-red-950 hover:bg-red-900 text-red-300 border border-red-800/60 text-xs transition">
+                                    <i class="fa-solid fa-broom mr-1"></i> Odayı Temizle (Baron)
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Mesaj Listesi -->
+                        <div id="chatMessagesBox" class="flex-1 p-4 overflow-y-auto space-y-3"></div>
+
+                        <!-- Mesaj Gönderme Formu -->
+                        <form id="chatForm" class="p-3 bg-black/80 border-t border-gray-800 flex items-center gap-2">
+                            <input id="chatInput" type="text" required placeholder="Mesajını yaz... (Yapay zeka Başmüşavir'e sormak için başına @müşavir yazabilirsin)" autocomplete="off"
+                                class="flex-1 px-4 py-2.5 rounded-xl bg-council-dark border border-gray-700 focus:border-council-gold text-sm text-white outline-none">
+                            <button type="submit" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-600 to-yellow-500 hover:from-amber-500 hover:to-yellow-400 text-black font-bold text-xs uppercase tracking-wider transition flex items-center gap-1.5">
+                                <i class="fa-solid fa-paper-plane"></i> Gönder
+                            </button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- SAYFA 5: KONSEY İSTİHBARAT & DEDEKTİFLİK OYUNU (KATİLİ BUL) -->
+            <div id="page-dedektif" class="page-view hidden space-y-6">
+                <!-- Üst Başlık ve Kontroller -->
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-gray-800 pb-4">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-widest bg-red-950 text-red-400 border border-red-700/60">İstihbarat Dosyası</span>
+                            <span id="detCaseNumberBadge" class="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-amber-950/70 text-council-gold border border-council-gold/40">VAKA #1</span>
+                        </div>
+                        <h2 class="font-cinzel text-xl sm:text-2xl font-bold text-council-gold flex items-center gap-2 mt-1">
+                            <i class="fa-solid fa-magnifying-glass-location text-red-500"></i> Konsey Dedektiflik Bürosu: Katili Bul
+                        </h2>
+                        <p class="text-xs text-gray-400">Olay yeri raporunu oku, gizli delilleri incele, şüphelileri sorguya çek ve çelişkiyi yakalayıp gerçek katili ensesinden yakala!</p>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-2 shrink-0">
+                        <button id="aiGenerateCaseBtn" onclick="generateAiDetectiveCase()" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-purple-800 via-indigo-800 to-purple-900 hover:from-purple-700 hover:to-indigo-700 text-white border border-council-gold/60 font-cinzel font-bold text-xs uppercase tracking-wider transition flex items-center gap-2 shadow-lg">
+                            <i class="fa-solid fa-wand-magic-sparkles text-council-gold"></i> ✨ AI İle Özgün Vaka Üret
+                        </button>
+                        <button onclick="selectRandomDetectiveCase()" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-600 to-yellow-500 hover:from-amber-500 hover:to-yellow-400 text-black font-cinzel font-bold text-xs uppercase tracking-wider transition flex items-center gap-2 shadow-lg">
+                            <i class="fa-solid fa-dice"></i> Hazır Vaka Seç
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Ana Dedektiflik Çalışma Alanı -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    
+                    <!-- SOL VE ORTA (2 Sütun): Vaka Dosyası, İpuçları ve Şüpheliler -->
+                    <div class="lg:col-span-2 space-y-6">
+                        
+                        <!-- Vaka Özeti ve Olay Yeri Raporu -->
+                        <div class="bg-council-card rounded-2xl p-5 baron-border relative overflow-hidden space-y-4">
+                            <div class="flex flex-wrap items-center justify-between gap-2 border-b border-gray-800 pb-3">
+                                <div>
+                                    <span id="detCaseDifficulty" class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-red-900/60 text-red-200 border border-red-700">Zorluk: Yüksek</span>
+                                    <h3 id="detCaseTitle" class="font-cinzel text-lg sm:text-xl font-black text-white mt-1">Vaka Yükleniyor...</h3>
+                                </div>
+                                <div class="text-right text-xs text-gray-400 space-y-0.5">
+                                    <p><i class="fa-solid fa-location-dot text-red-500 mr-1"></i> <span id="detCaseLocation">-</span></p>
+                                    <p><i class="fa-regular fa-clock text-council-gold mr-1"></i> <span id="detCaseTime">-</span></p>
+                                </div>
+                            </div>
+
+                            <!-- Olay Hikayesi -->
+                            <div class="bg-black/60 p-4 rounded-xl border border-gray-800/90 space-y-2">
+                                <div class="text-xs font-bold uppercase tracking-wider text-council-gold flex items-center gap-1.5">
+                                    <i class="fa-solid fa-file-shield text-red-500"></i> Olay Yeri & Otopsi Özeti
+                                </div>
+                                <p id="detCaseStory" class="text-xs sm:text-sm text-gray-200 leading-relaxed"></p>
+                                <div class="pt-2 flex flex-wrap gap-3 text-xs text-gray-400 border-t border-gray-800/70">
+                                    <span><strong class="text-red-400">Kurban:</strong> <span id="detCaseVictim">-</span></span>
+                                    <span>•</span>
+                                    <span><strong class="text-amber-400">Ölüm Sebebi:</strong> <span id="detCaseCause">-</span></span>
+                                </div>
+                            </div>
+
+                            <!-- Olay Yeri Delilleri (Tıklayıp İncelemeli) -->
+                            <div class="space-y-2.5">
+                                <div class="flex items-center justify-between">
+                                    <h4 class="font-cinzel text-sm font-bold text-council-gold flex items-center gap-2">
+                                        <i class="fa-solid fa-fingerprint"></i> 1. Adım: Olay Yeri Delillerini İncele
+                                    </h4>
+                                    <span id="detClueCounter" class="text-[11px] text-gray-400">İncelenen Delil: 0 / 4</span>
+                                </div>
+                                <div id="detCluesGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    <!-- JS ile delil kartları buraya gelir -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Şüpheliler ve Sorgu Masası -->
+                        <div class="bg-council-card rounded-2xl p-5 gold-border space-y-4">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-gray-800 pb-3">
+                                <div>
+                                    <h4 class="font-cinzel text-base font-bold text-white flex items-center gap-2">
+                                        <i class="fa-solid fa-users-slash text-red-500"></i> 2. Adım: Şüphelileri Sorgula & Katili Suçla
+                                    </h4>
+                                    <p class="text-xs text-gray-400">Her şüphelinin ifadesini al, delillerle ifadeler arasındaki yalanı yakala ve gerçek katili seç!</p>
+                                </div>
+                            </div>
+
+                            <!-- Şüpheli Kartları -->
+                            <div id="detSuspectsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <!-- JS ile 4 şüpheli buraya gelir -->
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- SAĞ (1 Sütun): Sorgu Kayıt Ekranı, Sonuç Raporu ve Dedektif Liderlik Tablosu -->
+                    <div class="space-y-6">
+                        
+                        <!-- Canlı Sorgu ve İpucu Analiz Ekranı -->
+                        <div class="bg-council-card rounded-2xl p-5 gold-border space-y-3">
+                            <div class="flex items-center justify-between border-b border-gray-800 pb-2.5">
+                                <h4 class="font-cinzel text-sm font-bold text-council-gold flex items-center gap-2">
+                                    <i class="fa-solid fa-microphone-lines text-red-500"></i> Sorgu & İstihbarat Defteri
+                                </h4>
+                                <button id="aiHintBtn" onclick="askAiDetectiveHint()" class="text-[10px] px-2.5 py-1 rounded-lg bg-purple-950 hover:bg-purple-900 text-purple-200 border border-purple-700/60 font-bold transition flex items-center gap-1">
+                                    <i class="fa-solid fa-wand-magic-sparkles text-council-gold"></i> ✨ AI İstihbarat Analizi
+                                </button>
+                            </div>
+                            <div id="detInvestigationLog" class="bg-black/80 rounded-xl p-3.5 border border-gray-800 h-56 overflow-y-auto space-y-2.5 text-xs">
+                                <!-- Sorgu ve ipucu kayıtları buraya düşer -->
+                            </div>
+                        </div>
+
+                        <!-- Vaka Çözüm Sonucu Kutusu (Suçlama Yapılınca Açılır) -->
+                        <div id="detVerdictBox" class="hidden rounded-2xl p-5 border space-y-3 transition-all">
+                            <div class="flex items-center gap-3">
+                                <div id="detVerdictIcon" class="w-11 h-11 rounded-xl flex items-center justify-center text-xl shrink-0"></div>
+                                <div>
+                                    <h4 id="detVerdictTitle" class="font-cinzel text-base font-black"></h4>
+                                    <p id="detVerdictSub" class="text-xs text-gray-300"></p>
+                                </div>
+                            </div>
+                            <div id="detVerdictExplanation" class="p-3.5 rounded-xl bg-black/70 border border-gray-800 text-xs text-gray-200 leading-relaxed"></div>
+                            <button onclick="selectRandomDetectiveCase()" class="w-full py-2.5 rounded-xl bg-council-gold hover:bg-yellow-400 text-black font-cinzel font-bold text-xs uppercase tracking-wider transition">
+                                <i class="fa-solid fa-forward mr-1"></i> Sıradaki Vakaya Geç
+                            </button>
+                        </div>
+
+                        <!-- Konsey Başdedektifler Sıralaması (Skor Tablosu) -->
+                        <div class="bg-council-card rounded-2xl p-5 gold-border space-y-3">
+                            <div class="flex items-center justify-between border-b border-gray-800 pb-2.5">
+                                <div>
+                                    <h4 class="font-cinzel text-sm font-bold text-white flex items-center gap-2">
+                                        <i class="fa-solid fa-medal text-council-gold"></i> Başdedektifler Tablosu
+                                    </h4>
+                                    <p class="text-[11px] text-gray-400">Vakaları çözen konsey üyelerinin istihbarat puanları.</p>
+                                </div>
+                            </div>
+                            <div id="detLeaderboardList" class="space-y-2">
+                                <!-- JS ile dedektif skorları buraya gelir -->
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- SAYFA 6: BARON YÖNETİM ODASI (SADECE BARON YETKİLİ) -->
+            <div id="page-baron" class="page-view hidden space-y-6">
+                
+                <!-- Yetkisiz Üye Uyarı Ekranı (Heisenberg veya diğer üyeler tıklarsa) -->
+                <div id="baronLockedNotice" class="hidden bg-council-card rounded-2xl p-8 gold-border text-center max-w-xl mx-auto my-8 space-y-4">
+                    <div class="w-16 h-16 rounded-full bg-red-950 border-2 border-red-600 mx-auto flex items-center justify-center text-red-500 text-2xl">
+                        <i class="fa-solid fa-lock"></i>
+                    </div>
+                    <h3 class="font-cinzel text-2xl font-bold text-red-500">BU ODA SADECE BARON'A AİTTİR!</h3>
+                    <p class="text-sm text-gray-300 leading-relaxed">
+                        Sayın <strong id="lockedMemberName" class="text-council-gold">Üye</strong>, Kurtlar Konseyi kuralları gereği üye ekleme, konseyden ihraç etme, şifre belirleme ve rütbe değiştirme yetkileri yalnızca **Baron (Kaptan)** tekelindedir.
+                    </p>
+                    <div class="pt-2">
+                        <button onclick="switchPage('masa')" class="px-5 py-2.5 rounded-xl bg-gray-800 hover:bg-gray-700 text-xs text-white font-semibold">
+                            <i class="fa-solid fa-arrow-left mr-1"></i> Konsey Masasına Dön
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Sadece Baron'a Açık Tam Kontrol Paneli -->
+                <div id="baronAdminContent" class="space-y-6">
+                    <div class="bg-gradient-to-r from-amber-950/40 via-red-950/40 to-black p-5 rounded-2xl baron-border flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div class="flex items-center gap-3.5">
+                            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500 to-yellow-700 text-black flex items-center justify-center text-2xl font-bold shadow-lg">
+                                <i class="fa-solid fa-crown"></i>
+                            </div>
+                            <div>
+                                <h2 class="font-cinzel text-xl sm:text-2xl font-black gold-gradient-text">BARON YÜKSEK YÖNETİM DİVANI</h2>
+                                <p class="text-xs text-gray-300">Kaptan, buradan yeni arkadaş ekleyebilir, herkesin giriş şifresini değiştirebilir ve üyeleri yönetebilirsin. Tüm değişiklikler anında kaydedilir.</p>
+                            </div>
+                        </div>
+                        <button onclick="resetToFactoryDefaults()" class="px-3.5 py-2 rounded-xl bg-red-950/80 hover:bg-red-900 border border-red-700/60 text-xs text-red-200 font-semibold transition shrink-0">
+                            <i class="fa-solid fa-rotate-left mr-1"></i> Fabrika Ayarlarına Sıfırla
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        
+                        <!-- SOL: Yeni Üye & Şifre Tanımlama Formu -->
+                        <div class="bg-council-card rounded-2xl p-5 gold-border h-fit space-y-4">
+                            <h3 class="font-cinzel text-lg font-bold text-council-gold border-b border-gray-800 pb-2.5 flex items-center gap-2">
+                                <i class="fa-solid fa-user-plus"></i> Masaya Yeni Üye & Şifre Ekle
+                            </h3>
+                            <form id="baronAddMemberForm" class="space-y-3.5">
+                                <div>
+                                    <label class="text-xs text-gray-400 block mb-1 font-semibold">Üye Kod Adı / Giriş İsmi *</label>
+                                    <input type="text" id="newMemUsername" required placeholder="Örn: Polat, Memati, Abdülhey..."
+                                        class="w-full px-3 py-2 rounded-xl bg-black border border-gray-700 text-sm text-white focus:border-council-gold outline-none">
+                                </div>
+
+                                <div>
+                                    <label class="text-xs text-gray-400 block mb-1 font-semibold">Üyenin Giriş Şifresi *</label>
+                                    <input type="text" id="newMemPassword" required placeholder="Örn: 123, kurt45, gizli99..."
+                                        class="w-full px-3 py-2 rounded-xl bg-black border border-gray-700 text-sm text-council-gold font-mono focus:border-council-gold outline-none">
+                                    <p class="text-[10px] text-gray-500 mt-1">Arkadaşın siteye girerken bu ismi ve şifreyi kullanacak.</p>
+                                </div>
+
+                                <div>
+                                    <label class="text-xs text-gray-400 block mb-1 font-semibold">Konseydeki Rütbesi / Unvanı</label>
+                                    <input type="text" id="newMemRank" value="Kılıç / Konsey Üyesi" placeholder="Örn: Sağ Kol, İstihbarat Şefi..."
+                                        class="w-full px-3 py-2 rounded-xl bg-black border border-gray-700 text-sm text-white focus:border-council-gold outline-none">
+                                </div>
+
+                                <div>
+                                    <label class="text-xs text-gray-400 block mb-1 font-semibold">Yetki Seviyesi</label>
+                                    <select id="newMemRole" class="w-full px-3 py-2 rounded-xl bg-black border border-gray-700 text-sm text-white focus:border-council-gold outline-none">
+                                        <option value="Üye">🐺 Standart Konsey Üyesi (Kısıtlı Yetki)</option>
+                                        <option value="Baron">👑 Baron Yetkisi (Tam Yönetici)</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label class="text-xs text-gray-400 block mb-1 font-semibold">Uzmanlık Alanı</label>
+                                    <input type="text" id="newMemSpec" placeholder="Örn: Gece Operasyonları & Lobi Kurucu"
+                                        class="w-full px-3 py-2 rounded-xl bg-black border border-gray-700 text-sm text-white focus:border-council-gold outline-none">
+                                </div>
+
+                                <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-amber-600 to-yellow-500 hover:from-amber-500 hover:to-yellow-400 text-black font-cinzel font-bold text-xs uppercase tracking-wider shadow-lg transition">
+                                    <i class="fa-solid fa-key mr-1"></i> ÜYEYİ VE ŞİFRESİNİ KAYDET
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- SAĞ (2 Sütun): Mevcut Üyeler, Şifre Değiştirme ve İhraç Tablosu -->
+                        <div class="lg:col-span-2 bg-council-card rounded-2xl p-5 gold-border space-y-4">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-gray-800 pb-3">
+                                <div>
+                                    <h3 class="font-cinzel text-lg font-bold text-white flex items-center gap-2">
+                                        <i class="fa-solid fa-users-gear text-council-gold"></i> Üye Şifreleri & Yetki Yönetimi
+                                    </h3>
+                                    <p class="text-xs text-gray-400">Herhangi bir üyenin şifresini veya unvanını kutucuktan değiştirip <strong class="text-council-gold">"Kaydet"</strong> butonuna basman yeterlidir.</p>
+                                </div>
+                                <span id="adminMemberCount" class="px-3 py-1 rounded-full bg-black border border-council-gold/40 text-xs text-council-gold font-bold">0 Kayıtlı Üye</span>
+                            </div>
+
+                            <!-- Üye Yönetim Listesi -->
+                            <div id="baronMembersTable" class="space-y-3"></div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- ALT BİLGİ (FOOTER) -->
+        <footer class="border-t border-gray-900 bg-black/70 py-4 px-4 text-center text-xs text-gray-500 mt-10">
+            <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+                <p><span class="text-council-gold font-cinzel font-bold">KURTLAR KONSEYİ</span> — Baron (Kaptan) & Dostları Özel Portalı</p>
+                <p id="syncFooterInfo" class="text-[11px] font-mono text-gray-400">Kalıcı Veritabanı Aktif — Sayfa yenilendiğinde tüm şifreler ve üyeler korunur.</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- ==================== MODALLAR ==================== -->
+
+    <!-- 1. Baron Fermanı Düzenleme Modalı -->
+    <div id="decreeModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="bg-council-dark w-full max-w-md rounded-2xl baron-border p-6 space-y-4">
+            <div class="flex items-center justify-between border-b border-gray-800 pb-3">
+                <h4 class="font-cinzel text-lg font-bold text-council-gold"><i class="fa-solid fa-crown mr-2"></i>Baron'un Fermanını Güncelle</h4>
+                <button onclick="closeModal('decreeModal')" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="decreeForm" class="space-y-3.5">
+                <div>
+                    <div class="flex items-center justify-between mb-1">
+                        <label class="text-xs text-gray-400">En Üstte Görünecek Konsey Fermanı *</label>
+                        <button type="button" id="aiDecreeBtn" onclick="generateAiBaronDecree()" class="text-[11px] px-2.5 py-1 rounded-lg bg-purple-950 hover:bg-purple-900 border border-purple-600/50 text-purple-200 font-bold transition flex items-center gap-1">
+                            <i class="fa-solid fa-wand-magic-sparkles text-council-gold"></i> ✨ AI İle Ferman Yaz
+                        </button>
+                    </div>
+                    <textarea id="decreeInput" rows="3" required class="w-full px-3 py-2 rounded-xl bg-black border border-gray-700 text-sm text-white focus:border-council-gold outline-none"></textarea>
+                </div>
+                <div class="flex justify-end gap-2">
+                    <button type="button" onclick="closeModal('decreeModal')" class="px-4 py-2 rounded-xl bg-gray-800 text-xs text-gray-300">İptal</button>
+                    <button type="submit" class="px-5 py-2 rounded-xl bg-council-gold text-black font-bold text-xs">Mühürle & Yayınla</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 2. Kendi Durum Mesajını Güncelleme Modalı -->
+    <div id="statusModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="bg-council-dark w-full max-w-md rounded-2xl gold-border p-6 space-y-4">
+            <div class="flex items-center justify-between border-b border-gray-800 pb-3">
+                <h4 class="font-cinzel text-lg font-bold text-council-gold">Durumunu & Uzmanlığını Güncelle</h4>
+                <button onclick="closeModal('statusModal')" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="statusForm" class="space-y-3.5">
+                <div>
+                    <label class="text-xs text-gray-400 block mb-1">Güncel Durum Mesajın</label>
+                    <input type="text" id="myStatusInput" required placeholder="Örn: Lobide herkesi bekliyorum..." class="w-full px-3 py-2 rounded-xl bg-black border border-gray-700 text-sm text-white focus:border-council-gold outline-none">
+                </div>
+                <div>
+                    <label class="text-xs text-gray-400 block mb-1">Uzmanlık Alanın</label>
+                    <input type="text" id="mySpecInput" required placeholder="Örn: Gece Operasyonları" class="w-full px-3 py-2 rounded-xl bg-black border border-gray-700 text-sm text-white focus:border-council-gold outline-none">
+                </div>
+                <div class="flex justify-end gap-2">
+                    <button type="button" onclick="closeModal('statusModal')" class="px-4 py-2 rounded-xl bg-gray-800 text-xs text-gray-300">İptal</button>
+                    <button type="submit" class="px-5 py-2 rounded-xl bg-council-gold text-black font-bold text-xs">Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 3. Yeni Oylama Modalı -->
+    <div id="pollModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="bg-council-dark w-full max-w-md rounded-2xl gold-border p-6 space-y-4">
+            <div class="flex items-center justify-between border-b border-gray-800 pb-3">
+                <h4 class="font-cinzel text-lg font-bold text-red-400"><i class="fa-solid fa-gavel mr-2"></i>Yeni Konsey Oylaması</h4>
+                <button onclick="closeModal('pollModal')" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="pollForm" class="space-y-3.5">
+                <div>
+                    <label class="text-xs text-gray-400 block mb-1">Oylama Konusu *</label>
+                    <input type="text" id="pollTitle" required placeholder="Örn: Bu akşam saat 22:00'de CS2 giriliyor mu?" class="w-full px-3 py-2 rounded-xl bg-black border border-gray-700 text-sm text-white focus:border-council-gold outline-none">
+                </div>
+                <div>
+                    <label class="text-xs text-gray-400 block mb-1">Kategori</label>
+                    <select id="pollCategory" class="w-full px-3 py-2 rounded-xl bg-black border border-gray-700 text-sm text-white focus:border-council-gold outline-none">
+                        <option value="Oyun & Operasyon">🎮 Oyun & Operasyon Kararı</option>
+                        <option value="İnfaz & Ceza">⚖️ İnfaz & Ceza Kesimi</option>
+                        <option value="Hesap & Ismarlama">☕ Hesap & Ismarlama</option>
+                        <option value="Genel Ferman">📜 Genel Konsey Fermanı</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-xs text-gray-400 block mb-1">Açıklama</label>
+                    <textarea id="pollDesc" rows="2" placeholder="Detayları buraya yaz..." class="w-full px-3 py-2 rounded-xl bg-black border border-gray-700 text-sm text-white focus:border-council-gold outline-none"></textarea>
+                </div>
+                <div class="flex justify-end gap-2 pt-2">
+                    <button type="button" onclick="closeModal('pollModal')" class="px-4 py-2 rounded-xl bg-gray-800 text-xs text-gray-300">İptal</button>
+                    <button type="submit" class="px-5 py-2 rounded-xl bg-red-700 hover:bg-red-600 text-white font-bold text-xs">Oylamaya Sun</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 4. Yeni Racon / Kural Modalı -->
+    <div id="quoteModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="bg-council-dark w-full max-w-md rounded-2xl gold-border p-6 space-y-4">
+            <div class="flex items-center justify-between border-b border-gray-800 pb-3">
+                <h4 class="font-cinzel text-lg font-bold text-council-gold"><i class="fa-solid fa-scroll mr-2"></i>Anayasaya Racon Ekle</h4>
+                <button onclick="closeModal('quoteModal')" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="quoteForm" class="space-y-3.5">
+                <div>
+                    <label class="text-xs text-gray-400 block mb-1">Racon Sözü veya Kural *</label>
+                    <textarea id="quoteText" required rows="3" placeholder="Örn: Dostun pingi çıktığında düşmana rushlanmaz, beklenir!" class="w-full px-3 py-2 rounded-xl bg-black border border-gray-700 text-sm text-white focus:border-council-gold outline-none"></textarea>
+                </div>
+                <div class="flex justify-end gap-2 pt-2">
+                    <button type="button" onclick="closeModal('quoteModal')" class="px-4 py-2 rounded-xl bg-gray-800 text-xs text-gray-300">İptal</button>
+                    <button type="submit" class="px-5 py-2 rounded-xl bg-council-gold text-black font-bold text-xs">Anayasaya Kazı</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 5. Kara Liste / Ceza Modalı -->
+    <div id="bountyModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="bg-council-dark w-full max-w-md rounded-2xl gold-border p-6 space-y-4">
+            <div class="flex items-center justify-between border-b border-gray-800 pb-3">
+                <h4 class="font-cinzel text-lg font-bold text-red-500"><i class="fa-solid fa-skull-crossbones mr-2"></i>Kara Listeye Al / Ceza Kes</h4>
+                <button onclick="closeModal('bountyModal')" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="bountyForm" class="space-y-3.5">
+                <div>
+                    <label class="text-xs text-gray-400 block mb-1">Hedef Üye *</label>
+                    <input type="text" id="bountyTarget" required placeholder="Örn: Heisenberg, Gölge Kurt..." class="w-full px-3 py-2 rounded-xl bg-black border border-gray-700 text-sm text-white focus:border-council-gold outline-none">
+                </div>
+                <div>
+                    <label class="text-xs text-gray-400 block mb-1">Suçu / Gerekçesi *</label>
+                    <input type="text" id="bountyReason" required placeholder="Örn: '5 dakikaya geliyorum' deyip 2 saat kayboldu." class="w-full px-3 py-2 rounded-xl bg-black border border-gray-700 text-sm text-white focus:border-council-gold outline-none">
+                </div>
+                <div>
+                    <label class="text-xs text-gray-400 block mb-1">Kesilen Ceza / Bedel *</label>
+                    <input type="text" id="bountyReward" required placeholder="Örn: Tüm konseye lahmacun + ayran ısmarlayacak!" class="w-full px-3 py-2 rounded-xl bg-black border border-gray-700 text-sm text-white focus:border-council-gold outline-none">
+                </div>
+                <div class="flex justify-end gap-2 pt-2">
+                    <button type="button" onclick="closeModal('bountyModal')" class="px-4 py-2 rounded-xl bg-gray-800 text-xs text-gray-300">İptal</button>
+                    <button type="submit" class="px-5 py-2 rounded-xl bg-red-700 hover:bg-red-600 text-white font-bold text-xs">Cezayı Kes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 6. KODLARI AYRI DOSYALARA BÖLME (HTML / CSS / JS) MODALI -->
+    <div id="codeExportModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="bg-council-dark w-full max-w-2xl rounded-2xl baron-border p-6 space-y-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between border-b border-gray-800 pb-3">
+                <div>
+                    <h4 class="font-cinzel text-lg font-bold text-council-gold"><i class="fa-solid fa-folder-open mr-2"></i>Temiz Kod Mimarisi: Ayrı Dosyalar Olarak İndir</h4>
+                    <p class="text-xs text-gray-400">Bilgisayarındaki klasörde düzenli çalışmak için projeyi 3 ayrı dosyaya (`index.html`, `style.css`, `app.js`) ayrılmış olarak indirebilirsin.</p>
+                </div>
+                <button onclick="closeModal('codeExportModal')" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div class="p-4 rounded-xl bg-black/70 border border-gray-800 flex flex-col justify-between gap-3">
+                    <div>
+                        <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-orange-950 text-orange-400 border border-orange-700/50">1. İSKELET DOSYASI</span>
+                        <h5 class="font-mono font-bold text-sm text-white mt-2">index.html</h5>
+                        <p class="text-[11px] text-gray-400 mt-1">Sadece HTML etiketlerini içerir. `style.css` ve `app.js` dosyalarını dışarıdan çağırır.</p>
+                    </div>
+                    <button onclick="downloadSeparatedFile('html')" class="w-full py-2 rounded-lg bg-orange-600 hover:bg-orange-500 text-black font-bold text-xs transition flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-download"></i> index.html İndir
+                    </button>
+                </div>
+
+                <div class="p-4 rounded-xl bg-black/70 border border-gray-800 flex flex-col justify-between gap-3">
+                    <div>
+                        <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-950 text-blue-400 border border-blue-700/50">2. TASARIM DOSYASI</span>
+                        <h5 class="font-mono font-bold text-sm text-white mt-2">style.css</h5>
+                        <p class="text-[11px] text-gray-400 mt-1">Tüm altın/kızıl çerçeveler, arka plan efektleri ve animasyon kurallarını içerir.</p>
+                    </div>
+                    <button onclick="downloadSeparatedFile('css')" class="w-full py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs transition flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-download"></i> style.css İndir
+                    </button>
+                </div>
+
+                <div class="p-4 rounded-xl bg-black/70 border border-gray-800 flex flex-col justify-between gap-3">
+                    <div>
+                        <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-950 text-amber-400 border border-amber-700/50">3. SİSTEM & MANTIK</span>
+                        <h5 class="font-mono font-bold text-sm text-white mt-2">app.js</h5>
+                        <p class="text-[11px] text-gray-400 mt-1">Giriş sistemi, Baron yetkileri, Dedektiflik vakaları ve Sesli Telsiz kodlarını içerir.</p>
+                    </div>
+                    <button onclick="downloadSeparatedFile('js')" class="w-full py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-black font-bold text-xs transition flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-download"></i> app.js İndir
+                    </button>
+                </div>
+            </div>
+
+            <div class="p-3.5 rounded-xl bg-amber-950/20 border border-council-gold/30 text-xs text-gray-300 space-y-1">
+                <p class="font-bold text-council-gold"><i class="fa-solid fa-circle-info mr-1"></i> Bilgisayarında Nasıl Kullanırsın?</p>
+                <p>Masaüstünde <strong>Kurtlar Konseyi</strong> adında bir klasör açıp bu 3 dosyayı (`index.html`, `style.css`, `app.js`) aynı klasörün içine koyman yeterlidir. Kodlar birbirine otomatik bağlıdır!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- BİLDİRİM TOAST KUTUSU -->
+    <div id="toastBox" class="fixed bottom-5 right-5 z-50 max-w-sm bg-council-dark border-l-4 border-council-gold text-white px-4 py-3 rounded-xl shadow-2xl transform translate-y-24 opacity-0 transition-all duration-300 flex items-center gap-3 pointer-events-none">
+        <i class="fa-solid fa-gavel text-council-gold text-lg"></i>
+        <div>
+            <p id="toastTitle" class="text-xs font-cinzel font-bold text-council-gold uppercase">Konsey Mührü</p>
+            <p id="toastMsg" class="text-xs text-gray-200"></p>
+        </div>
+    </div>
+
+    <!-- ==================== UYGULAMA & KALICI VERİTABANI MANTIĞI ==================== -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // --- KALICI VERİTABANI ANAHTARI (Sayfa yenilendiğinde asla silinmez) ---
+        const STORAGE_KEY = 'KURTLAR_KONSEYI_STATE_V2';
+        const SESSION_KEY = 'KURTLAR_KONSEYI_ACTIVE_USER_V2';
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        function getInitialDefaultState() {
+            return {
+                decree: "Kurtlar Konseyi'nde dostluk mezara kadardır. Bu akşam herkes saatinde masada hazır olacak!",
+                members: [
+                    {
+                        id: "mem-baron",
+                        name: "Kaptan",
+                        password: "baron",
+                        role: "Baron",
+                        rank: "Konsey Baronu",
+                        loyalty: 100,
+                        specialty: "Başkomutan & Strateji Dehası",
+                        status: "Masada son sözü söyler."
+                    },
+                    {
+                        id: "mem-heisenberg",
+                        name: "Heisenberg",
+                        password: "123",
+                        role: "Üye",
+                        rank: "Baş Kimyager & Sağ Kol",
+                        loyalty: 95,
+                        specialty: "Taktiksel Operasyon & Planlama",
+                        status: "Say my name! Operasyona hazır."
+                    },
+                    {
+                        id: "mem-polat",
+                        name: "Polat",
+                        password: "456",
+                        role: "Üye",
+                        rank: "Kılıç & Saha Lideri",
+                        loyalty: 92,
+                        specialty: "Gece Operasyonları",
+                        status: "Sonunu düşünen kahraman olamaz."
+                    }
+                ],
+                polls: [
+                    {
+                        id: "poll-1",
+                        title: "Bu akşam saat 22:00'de tam kadro oyuna giriliyor mu?",
+                        category: "Oyun & Operasyon",
+                        desc: "Mazeret kabul edilmez, Kaptan lobiyi kuruyor. Eksik kalan kara listeye girer!",
+                        creator: "Kaptan",
+                        yesVotes: ["Kaptan", "Heisenberg"],
+                        noVotes: []
+                    },
+                    {
+                        id: "poll-2",
+                        title: "Buluşmada çayları ve tatlıları kim ısmarlıyor?",
+                        category: "Hesap & Ismarlama",
+                        desc: "Son oyunda en düşük skoru alan üye tüm masanın hesabını ödesin mi?",
+                        creator: "Heisenberg",
+                        yesVotes: ["Kaptan"],
+                        noVotes: []
+                    }
+                ],
+                quotes: [
+                    {
+                        id: "q-1",
+                        text: "Kurtlar Konseyi'nde dostluk pazara kadar değil, mezara kadardır. Kaptan karar verir, konsey uygular!",
+                        author: "Kaptan (Baron)",
+                        likes: 14
+                    },
+                    {
+                        id: "q-2",
+                        text: "Ben tehlikede değilim Kaptan, tehlikenin ta kendisiyim!",
+                        author: "Heisenberg",
+                        likes: 11
+                    },
+                    {
+                        id: "q-3",
+                        text: "Madde 1: 'Beş dakikaya geliyorum' deyip yarım saat geciken üye, bir sonraki buluşmada içecekleri ısmarlar.",
+                        author: "Konsey Anayasası",
+                        likes: 19
+                    }
+                ],
+                bounties: [
+                    {
+                        id: "b-1",
+                        target: "Oyun Ortasında AFK Kalan Üye",
+                        reason: "En kritik rauntta 'Kapı çaldı' diyerek takımı eksik bıraktı.",
+                        reward: "Tüm konseye lahmacun + ayran ısmarlama cezası",
+                        status: "Aktif",
+                        assignedBy: "Kaptan"
+                    }
+                ],
+                chats: [
+                    {
+                        id: "c-1",
+                        sender: "Kaptan",
+                        role: "Baron",
+                        text: "Selamünaleyküm dostlar, Kurtlar Konseyi yeni şifreli sistemimiz açılmıştır. Masaya hoş geldiniz!",
+                        time: "21:00"
+                    },
+                    {
+                        id: "c-2",
+                        sender: "Heisenberg",
+                        role: "Üye",
+                        text: "Aleykümselam Kaptan! Şifremle giriş yaptım, masa fişek gibi olmuş.",
+                        time: "21:02"
+                    }
+                ],
+                detectiveScores: {
+                    "Kaptan": { solved: 2, wrong: 0, points: 200 },
+                    "Heisenberg": { solved: 1, wrong: 0, points: 100 }
+                }
+            };
+        }
+
+        // --- DEDEKTİFLİK VAKA VERİTABANI (8 ZENGİN & KUSURSUZ KURGULANMIŞ VAKA) ---
+        const DETECTIVE_CASES = [
+            {
+                id: "case-1",
+                number: "VAKA #101",
+                title: "Beykoz Korusu'nda Zehirli Kahve",
+                difficulty: "Orta Seviye",
+                location: "Beykoz Gizli Konsey Köşkü",
+                time: "Gece 23:40",
+                victim: "Avukat Nizamettin (Konsey Hukukçusu)",
+                cause: "Fincanına katılan renksiz siyanür ile zehirlenme",
+                story: "Konseyin gizli tapu ve kasa belgelerini taşıyan Avukat Nizamettin, gece toplantı arasında çalışma odasında ölü bulundu. Masadaki sade Türk kahvesinden sadece bir yudum almıştı. Odaya son 30 dakika içinde sadece 4 kişi yaklaştı. Katil aramızda!",
+                clues: [
+                    { id: "c1", title: "Kırık Kahve Fincanı", icon: "fa-mug-hot", detail: "Fincanın sapında sadece SOL elini kullanan birinin bırakabileceği ters açıdan parmak izi ve fincan kenarında nikotin lekesi bulundu." },
+                    { id: "c2", title: "Koridor Kamera Kaydı", icon: "fa-video", detail: "Saat 23:25'te koridorun elektriği 2 dakikalığına kesildi. Jeneratör devreye girene kadar bir kişinin mutfaktan çıktığı görüldü." },
+                    { id: "c3", title: "Çöpteki İlaç Şişesi", icon: "fa-vial", detail: "Bahçe kazan dairesinde üzerinde kimya laboratuvarı seri numarası olan boş bir potasyum siyanür tüpü bulundu." },
+                    { id: "c4", title: "Kayıp İsviçre Belgeleri", icon: "fa-folder-open", detail: "Avukatın çantasındaki İsviçre banka hesap şifreleri çalınmamış, ancak 'Gümrük Sevkiyat Raporu' dosyası yok edilmiş." }
+                ],
+                suspects: [
+                    {
+                        id: "s1",
+                        name: "Garson Tarık",
+                        role: "Köşk Başhizmetkarı",
+                        avatar: "🤵",
+                        alibi: "Kahveyi saat 23:20'de ben götürdüm ama o sırada Avukat Bey telefonla konuşuyordu, kahveye hiç dokunmadı.",
+                        statement: "Ben 15 yıldır bu köşkte hizmet ederim. Sağ elimi kullanırım ve hayatımda ağzıma sigara sürmedim. Kahveyi bıraktığımda tamamen temizdi.",
+                        isKiller: false
+                    },
+                    {
+                        id: "s2",
+                        name: "Kimyager Faruk",
+                        role: "Lojistik & Laboratuvar Sorumlusu",
+                        avatar: "🧪",
+                        alibi: "Saat 23:15 ile 23:45 arasında bahçede puro içiyordum, içeri hiç girmedim.",
+                        statement: "Evet siyanür tüpü benim laboratuvarımdan çalınmış olabilir ama ben o saatte bahçedeydim. Ayrıca ben sağlağım ve gümrük işleriyle hiçbir alakam yok!",
+                        isKiller: false
+                    },
+                    {
+                        id: "s3",
+                        name: "Gümrükçü Halit",
+                        role: "Liman Sevkiyat Müdürü",
+                        avatar: "🚢",
+                        alibi: "Elektrikler kesildiğinde salonda oturup maç özetlerine bakıyordum, çalışma odasına hiç gitmedim.",
+                        statement: "Avukatla aramız çok iyiydi! Gümrük belgelerinde hiçbir usulsüzlüğüm yok. Solak olduğum ve sarı filtreli sigara içtiğim doğrudur ama kahveye zehri ben atmadım!",
+                        isKiller: true
+                    },
+                    {
+                        id: "s4",
+                        name: "Sekreter Ceyda",
+                        role: "Avukatın Özel Kalemi",
+                        avatar: "👩‍💼",
+                        alibi: "Saat 23:10'da dosyaları teslim edip üst kattaki arşiv odasına çıktım.",
+                        statement: "Nizamettin Bey bana çok güvenirdi. Çantasındaki Gümrük Raporu'nda limandaki kayıp mallarla ilgili bir açık yakalamıştı ve bu gece Baron'a sunacaktı.",
+                        isKiller: false
+                    }
+                ],
+                solutionExplanation: "Gerçek Katil: GÜMRÜKÇÜ HALİT! Çünkü: 1) Çalınan tek dosya 'Gümrük Sevkiyat Raporu' idi (Halit'in limandaki açığını içeriyordu). 2) Fincanda SOLAK birine ait iz ve sigara/nikotin lekesi bulundu. Şüpheliler arasında hem solak olan hem sigara içen hem de gümrük dosyasını yok etmek için sebebi olan tek kişi Gümrükçü Halit'tir!"
+            },
+            {
+                id: "case-2",
+                number: "VAKA #102",
+                title: "Haydarpaşa Limanı'nda Gece İnfazı",
+                difficulty: "Zor Seviye",
+                location: "Haydarpaşa 4 Nolu Konteyner İskelesi",
+                time: "Gece 01:15",
+                victim: "Kurye Selim (Konsey Özel Kuryesi)",
+                cause: "Susturuculu 9mm tabanca ile yakın mesafeden ateş",
+                story: "Konseyin şifreli harddiskini taşıyan Kurye Selim, sağanak yağmur altında 4 Nolu konteynerin önünde vurulmuş halde bulundu. Şifreli çanta alınmıştı. Olay saatinde liman kapısından sadece 4 kişinin aracı geçiş yaptı.",
+                clues: [
+                    { id: "c1", title: "Lastik ve Çamur İzi", icon: "fa-car-side", detail: "Cesedin 3 metre yanında sadece 4x4 arazi tipi kış lastiklerinin bırakabileceği derin dişli kırmızı kil çamuru bulundu." },
+                    { id: "c2", title: "Sağanak Yağmur Raporu", icon: "fa-cloud-showers-heavy", detail: "Liman meteoroloji kaydına göre yağmur tam 01:00'de başladı ve 01:30'a kadar bardaktan boşanırcasına yağdı." },
+                    { id: "c3", title: "Kovan ve Barut İzi", icon: "fa-crosshairs", detail: "Mermi kovanı cesedin SAĞ tarafına düşmüş, atış açısı katilin 1.85m üzerinde uzun boylu biri olduğunu gösteriyor." },
+                    { id: "c4", title: "Kırık Kol Saati", icon: "fa-clock", detail: "Kurye Selim boğuşurken katilin kolundan altın kaplama bir saat koparmış; saat 01:14'te kırılıp durmuş." }
+                ],
+                suspects: [
+                    {
+                        id: "s1",
+                        name: "Kaptan İdris",
+                        role: "Römorkör Kaptanı",
+                        avatar: "⚓",
+                        alibi: "Gece 00:45'ten beri geminin makine dairesinde arıza tamir ediyordum.",
+                        statement: "Boyum 1.68m, aracım bile yok limana yürüyerek geldim. Ellerim motor yağı içinde, kol saati de asla takmam.",
+                        isKiller: false
+                    },
+                    {
+                        id: "s2",
+                        name: "Galerici Vural",
+                        role: "Lüks Araç & Lojistik Sorumlusu",
+                        avatar: "🚙",
+                        alibi: "Ben limana saat 00:50'de geldim, Kurye Selim'le evrak imzalayıp yağmur henüz hiç başlamadan 00:55'te limandan kuru şekilde ayrıldım.",
+                        statement: "Altın saatimi dün düşürdüm! 4x4 Siyah Cip kullanıyorum ve boyum 1.88m olabilir ama ben limandan çıkarken tek damla yağmur yağmıyordu!",
+                        isKiller: true
+                    },
+                    {
+                        id: "s3",
+                        name: "Bekçi Rüstem",
+                        role: "Liman Gece Amirliği",
+                        avatar: "🔦",
+                        alibi: "Saat 01:15'te kulübemde telsiz nöbetindeydim.",
+                        statement: "Saat 01:18'de siyah bir 4x4 Cipin son sürat sağanak yağmur altında bariyeri kırarcasına çıktığını gördüm! Plakasını çamurdan okuyamadım.",
+                        isKiller: false
+                    },
+                    {
+                        id: "s4",
+                        name: "Hacker Bora",
+                        role: "Şifreleme Uzmanı",
+                        avatar: "💻",
+                        alibi: "Spor otomobilimle 01:20'de geldim, Selim'i yerde görünce hemen Kaptan'a haber verdim.",
+                        statement: "Benim aracım yere çok yakın spor bir araç, çamurlu yola hiç giremez. Ayrıca boyum 1.72m ve akıllı saat kullanıyorum.",
+                        isKiller: false
+                    }
+                ],
+                solutionExplanation: "Gerçek Katil: GALERİCİ VURAL! Çünkü: Vural ifadesinde 'Yağmur başlamadan 00:55'te çıktım' diyerek yalan söyledi. Oysa Bekçi Rüstem 01:18'de sağanak yağmur altında siyah 4x4 Cipin kaçtığını gördü, olay yerinde 4x4 lastik izi, 1.88m boy açısı ve Vural'ın kopan altın kol saati (01:14'te durmuş) bulundu!"
+            },
+            {
+                id: "case-3",
+                number: "VAKA #103",
+                title: "Yeraltı Kasasında Elmas Soygunu ve Cinayet",
+                difficulty: "Uzman Seviye",
+                location: "Karaköy Zırhlı Konsey Mahzeni",
+                time: "Akşam 21:00",
+                victim: "Kasa Muhafızı Davut",
+                cause: "Arkadan elektroşok ve ardından ağır darbe",
+                story: "Konseyin acil durum fonu olan 5 milyon dolarlık elmas kesesi Karaköy'deki şifreli mahzenden çalındı, muhafız Davut şehit edildi. Mahzen kapısında zorlama yok; içeriden biri retina ve ses onayıyla kapıyı açtı!",
+                clues: [
+                    { id: "c1", title: "Termal Kamera Kaydı", icon: "fa-temperature-arrow-up", detail: "Kasa odasına giren kişinin sağ bacağında eski bir şarapnel yarası olduğu için hafif topallayarak yürüdüğü tespit edildi." },
+                    { id: "c2", title: "Yerdeki Kül ve Koku", icon: "fa-smoking", detail: "Havalandırma mazgalının dibinde sadece Küba'dan özel getirilen vanilya aromalı nadir bir puronun külü bulundu." },
+                    { id: "c3", title: "Dijital Giriş Logu", icon: "fa-key", detail: "Mahzenin 8 haneli ana şifresi tek seferde hatasız girilmiş. Bu şifreyi sadece üst düzey 3 konsey görevlisi biliyordu." },
+                    { id: "c4", title: "Kırık Gözlük Camı", icon: "fa-glasses", detail: "Muhafızın elinde +2.50 numara yakın gözlüğü camı parçası bulundu." }
+                ],
+                suspects: [
+                    {
+                        id: "s1",
+                        name: "Muhasebeci İhsan",
+                        role: "Konsey Finans Müdürü",
+                        avatar: "👓",
+                        alibi: "Akşam 20:30'dan beri üst kattaki ofisimde bilanço okuyordum.",
+                        statement: "Evet +2.50 numara okuma gözlüğü kullanıyorum ve geçen yılki çatışmadan dolayı sağ bacağım aksıyor. Vanilyalı Küba purosu da içerim ama mahzene hiç inmedim!",
+                        isKiller: true
+                    },
+                    {
+                        id: "s2",
+                        name: "Teknisyen Murat",
+                        role: "Güvenlik Sistemleri Uzmanı",
+                        avatar: "🛠️",
+                        alibi: "O saatte kamera sunucularını güncelliyordum.",
+                        statement: "Ben kasa şifresini bilmem, sadece kablolara bakarım. Gözlük kullanmam ve bacağımda hiçbir engel yok.",
+                        isKiller: false
+                    },
+                    {
+                        id: "s3",
+                        name: "Kurye Zafer",
+                        role: "Zırhlı Araç Şoförü",
+                        avatar: "🚐",
+                        alibi: "Garajda zırhlı aracın bakımını yapıyordum.",
+                        statement: "Sağ bacağım geçen ay burkuldu, hafif topallıyorum ama ne gözlük takarım ne de kasa şifresini bilirim!",
+                        isKiller: false
+                    },
+                    {
+                        id: "s4",
+                        name: "Emekli Albay Refik",
+                        role: "Strateji Danışmanı",
+                        avatar: "🎖️",
+                        alibi: "Konsey salonunda harita üzerinde çalışıyordum.",
+                        statement: "Şifreyi biliyorum ve Küba purosu içerim. Ancak gözlerim kartal gibidir, hiç gözlük kullanmadım ve yürüyüşümde hiçbir aksama yoktur.",
+                        isKiller: false
+                    }
+                ],
+                solutionExplanation: "Gerçek Katil: MUHASEBECİ İHSAN! Çünkü: Hem kasa şifresini bilen, hem sağ bacağı aksayan, hem vanilyalı Küba purosu içen hem de olay yerinde kırılan +2.50 numara yakın gözlüğünün sahibi olan tek kişi Muhasebeci İhsan'dır!"
+            },
+            {
+                id: "case-4",
+                number: "VAKA #104",
+                title: "Boğaz Yatında Gizli Köstebek Suikastı",
+                difficulty: "Orta Seviye",
+                location: "Boğazın Ortası - 'Kurt-1' Özel Yatı",
+                time: "Gece 00:20",
+                victim: "İstihbaratçı Yalçın",
+                cause: "Güverteden denize itilmeden önce boynuna saplanan zehirli iğne",
+                story: "Konseyin içine sızan köstebeğin ismini açıklamak üzere yata binen İstihbaratçı Yalçın, yat Boğazın ortasındayken arka güvertede suikasta uğradı. Yatta dışarıdan kimse yoktu, katil yattaki 4 kişiden biri!",
+                clues: [
+                    { id: "c1", title: "Kopan Düğme", icon: "fa-shirt", detail: "Yalçın'ın avucunda üzerinde altın çapa arması olan lacivert bir denizci ceketi düğmesi bulundu." },
+                    { id: "c2", title: "Telsiz Frekans Kaydı", icon: "fa-walkie-talkie", detail: "Saat 00:15'te yatın arka güvertesinden kıyıdaki yabancı bir istihbarat botuna Mors alfabesiyle ışık sinyali gönderilmiş." },
+                    { id: "c3", title: "Zehirli İğne Analizi", icon: "fa-syringe", detail: "Kullanılan zehir Güney Amerika kökenli nadir bir kurbağa zehri; sadece egzotik koleksiyoncularda bulunuyor." },
+                    { id: "c4", title: "Güverte Boya Lekesi", icon: "fa-paintbrush", detail: "Arka güverte korkuluklarına yeni sürülen beyaz vernik, katilin sağ ceket koluna bulaşmış." }
+                ],
+                suspects: [
+                    {
+                        id: "s1",
+                        name: "Yat Kaptanı Engin",
+                        role: "Kurt-1 Yat Süvarisi",
+                        avatar: "🛳️",
+                        alibi: "Kaptan köşkünde dümeni tutuyordum, otomatik pilota hiç almadım.",
+                        statement: "Üzerimde altın çapalı lacivert kaptan ceketim var ama bütün düğmeleri tam! Sağ kolumda da hiçbir boya lekesi yok, kontrol edebilirsiniz.",
+                        isKiller: false
+                    },
+                    {
+                        id: "s2",
+                        name: "Koleksiyoncu Nedim",
+                        role: "Dış İlişkiler Sorumlusu",
+                        avatar: "🎩",
+                        alibi: "Alt kamarada viskimi içip tablo kataloglarına bakıyordum.",
+                        statement: "Üzerimde altın çapa düğmeli lacivert yat kulübü ceketim var. Bir düğmem kopmuş ve sağ koluma beyaz vernik bulaşmış, güverteye hava almaya çıktığımda değmiştir!",
+                        isKiller: true
+                    },
+                    {
+                        id: "s3",
+                        name: "Doktor Melih",
+                        role: "Konsey Sıhhiye Şefi",
+                        avatar: "🩺",
+                        alibi: "Revir çantamı düzenliyordum.",
+                        statement: "Zehirlerden anlarım ama üzerimde siyah deri mont var, ne çapa düğmem var ne de boya lekesi.",
+                        isKiller: false
+                    },
+                    {
+                        id: "s4",
+                        name: "Telsizci Sinan",
+                        role: "Haberleşme Uzmanı",
+                        avatar: "🎧",
+                        alibi: "Kaptan köşkünün arkasındaki telsiz odasındaydım.",
+                        statement: "Mors alfabesini bilirim ama bütün gece Kaptan Engin'in yanındaki odadaydım, üzerimde gri kazak var.",
+                        isKiller: false
+                    }
+                ],
+                solutionExplanation: "Gerçek Katil: KOLEKSİYONCU NEDİM! Çünkü: Alt kamaradan hiç çıkmadığını iddia etmesine rağmen sağ ceket kolunda sadece arka güverte korkuluğunda bulunan taze beyaz vernik lekesi var, altın çapalı ceketinin düğmesi kurbanın elinde kaldı ve egzotik zehir koleksiyonuna sahip!"
+            },
+            {
+                id: "case-5",
+                number: "VAKA #105",
+                title: "Sırp Sınırında Pusuya Düşürülen Konvoy",
+                difficulty: "Zor Seviye",
+                location: "Edirne Dağ Yolu - 3. Km",
+                time: "Şafak Vakti 05:30",
+                victim: "Konvoy Komutanı Сеrdar",
+                cause: "Araç içi gizli düzenekle gaz sızıntısı",
+                story: "Konseyin Balkanlar'dan gelen özel zırhlı aracı, sınır geçildikten hemen sonra yoldan çıktı. Komutan Serdar'ın aracın klimasından verilen uyutucu gazla etkisiz hale getirildiği ve içeriden birinin araca önceden düzenek kurduğu anlaşıldı.",
+                clues: [
+                    { id: "c1", title: "Klima Filtresi İncelemesi", icon: "fa-fan", detail: "Gaz tüpünü klimaya bağlayan kablolar sadece solak bir elektrikçinin kullandığı ters düğüm tekniğiyle sarılmış." },
+                    { id: "c2", title: "Garaj Giriş Kartı", icon: "fa-id-card", detail: "Gece 03:10'da garaja 'VIP-04' kodlu kartla girilmiş. Bu kart sahibinin ceketinde nane şekeri kokusu sinmiş." },
+                    { id: "c3", title: "Araç Paspasındaki İz", icon: "fa-shoe-prints", detail: "Şoför koltuğunun altında 41 numara ortopedik tabanlı iş botu izi ve metal torna talaşı bulundu." },
+                    { id: "c4", title: "Silinen Kamera Kaydı", icon: "fa-hard-drive", detail: "Garaj kamerası 03:00-03:30 arası 'ferhat_admin' şifresiyle dondurulmuş." }
+                ],
+                suspects: [
+                    {
+                        id: "s1",
+                        name: "BaşUsta Ferhat",
+                        role: "Zırhlı Araç Mekanik Şefi",
+                        avatar: "🔧",
+                        alibi: "Gece atölyemde uyuyordum, VIP-04 kartım çekmecemdeydi.",
+                        statement: "Sürekli nane şekeri yerim, 41 numara ortopedik bot giyerim ve solağım. Torna makinesinde çalıştığım için üstümde metal talaşı vardır ama gece garaja girmedim!",
+                        isKiller: true
+                    },
+                    {
+                        id: "s2",
+                        name: "Şoför Kenan",
+                        role: "Yedek Konvoy Şoförü",
+                        avatar: "🛞",
+                        alibi: "Yatakhane koğuşunda diğer şoförlerle çay içiyordum.",
+                        statement: "Ayak numaram 45, sağ elimi kullanırım ve elektrik işlerinden hiç anlamam.",
+                        isKiller: false
+                    },
+                    {
+                        id: "s3",
+                        name: "Bilişimci Emre",
+                        role: "Ağ Güvenlik Görevlisi",
+                        avatar: "🖥️",
+                        alibi: "Sunucu odasında nöbetteydim.",
+                        statement: "Kamera şifresi Ferhat Usta'nın kendi özel şifresiydi, iki gün önce benden kendisi talep etmişti.",
+                        isKiller: false
+                    },
+                    {
+                        id: "s4",
+                        name: "Nöbetçi Çavuş Тamer",
+                        role: "Garaj Kapı Muhafızı",
+                        avatar: "🛡️",
+                        alibi: "Dış kapıda devriyedeydim.",
+                        statement: "Saat 03:10'da atölye tarafından birinin garaja girdiğini gördüm, ağzında keskin bir nane kokusu vardı.",
+                        isKiller: false
+                    }
+                ],
+                solutionExplanation: "Gerçek Katil: BAŞUSTA FERHAT! Çünkü: Solak düğüm tekniği, 41 numara ortopedik bot izi, metal torna talaşı, nane şekeri kokusu ve kendi admin şifresiyle dondurulan kamera kayıtlarının tamamı doğrudan Ferhat Usta'yı işaret etmektedir!"
+            }
+        ];
+
+        // --- UYGULAMA DURUMU ---
+        let councilState = loadFromLocalStorage();
+        let activeDetectiveCase = null;
+        let revealedClues = new Set();
+        let interrogatedSuspects = new Set();
+        let caseSolvedInCurrentSession = false;
+        let loggedInMember = null;
+        let soundEnabled = true;
+        let db = null;
+        let auth = null;
+        let firebaseUser = null;
+        let isCloudConnected = false;
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'kurtlar-konseyi-v2';
+
+        function loadFromLocalStorage() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    if (parsed && Array.isArray(parsed.members) && parsed.members.length > 0) {
+                        return parsed;
+                    }
+                }
+            } catch (e) {
+                console.warn("LocalStorage okuma uyarısı:", e);
+            }
+            const initial = getInitialDefaultState();
+            saveToLocalStorage(initial);
+            return initial;
+        }
+
+        function saveToLocalStorage(stateObj) {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(stateObj));
+            } catch (e) {
+                console.warn("LocalStorage kayıt uyarısı:", e);
+            }
+        }
+
+        // Hem LocalStorage'a hem de Bulut'a (Firebase) anında kaydet
+        async function persistState(toastMsg = null) {
+            saveToLocalStorage(councilState);
+            renderAll();
+
+            if (toastMsg) {
+                showToast(toastMsg);
+            }
+
+            if (isCloudConnected && firebaseUser && db) {
+                try {
+                    const stateDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'kk_portal_state', 'main');
+                    await setDoc(stateDocRef, {
+                        payload: JSON.stringify(councilState),
+                        updatedAt: Date.now()
+                    });
+                } catch (e) {
+                    console.warn("Bulut senkronizasyon uyarısı (LocalStorage korundu):", e);
+                }
+            }
+        }
+
+        // --- FIREBASE GERÇEK ZAMANLI SENKRONİZASYON ---
+        async function initFirebaseSync() {
+            try {
+                if (typeof __firebase_config !== 'undefined' && __firebase_config) {
+                    const firebaseConfig = JSON.parse(__firebase_config);
+                    const app = initializeApp(firebaseConfig);
+                    db = getFirestore(app);
+                    auth = getAuth(app);
+
+                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                        await signInWithCustomToken(auth, __initial_auth_token);
+                    } else {
+                        await signInAnonymously(auth);
+                    }
+
+                    onAuthStateChanged(auth, (user) => {
+                        firebaseUser = user;
+                        if (user) {
+                            isCloudConnected = true;
+                            const stateDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'kk_portal_state', 'main');
+                            onSnapshot(stateDocRef, (snap) => {
+                                if (snap.exists() && snap.data().payload) {
+                                    try {
+                                        const remoteState = JSON.parse(snap.data().payload);
+                                        if (remoteState && Array.isArray(remoteState.members)) {
+                                            councilState = remoteState;
+                                            saveToLocalStorage(councilState);
+                                            syncActiveUserWithState();
+                                            renderAll();
+                                        }
+                                    } catch (err) {
+                                        console.error("Payload parse error:", err);
+                                    }
+                                } else {
+                                    // Bulutta henüz yoksa mevcut durumu buluta yaz
+                                    persistState();
+                                }
+                            }, (err) => {
+                                console.warn("Snapshot dinleme hatası:", err);
+                            });
+                        }
+                    });
+                }
+            } catch (e) {
+                console.warn("Yerel kalıcı veritabanı modu aktif:", e);
+            }
+        }
+
+        // --- SES EFEKTLERİ ---
+        window.playCouncilSound = async function(type) {
+            if (!soundEnabled || typeof Tone === 'undefined') return;
+            try {
+                await Tone.start();
+                const synth = new Tone.MembraneSynth().toDestination();
+                synth.volume.value = -8;
+                if (type === 'gavel') {
+                    synth.triggerAttackRelease("C1", "8n");
+                    setTimeout(() => synth.triggerAttackRelease("C1", "4n"), 170);
+                } else if (type === 'gate') {
+                    synth.triggerAttackRelease("G0", "2n");
+                } else if (type === 'click') {
+                    synth.triggerAttackRelease("E2", "32n");
+                }
+            } catch (e) {}
+        };
+
+        window.toggleSound = function() {
+            soundEnabled = !soundEnabled;
+            document.getElementById('soundIcon').className = soundEnabled ? 'fa-solid fa-volume-high' : 'fa-solid fa-volume-xmark text-gray-500';
+            showToast(soundEnabled ? "Ses efektleri açıldı." : "Ses efektleri kapatıldı.");
+        };
+
+        window.triggerEmergencyGavel = function() {
+            playCouncilSound('gavel');
+            showToast(`⚡ ${loggedInMember ? loggedInMember.name.toUpperCase() : 'BARON'} MASAYA TOKMAĞI VURDU!`, "Konsey İradesi");
+        };
+
+        // --- TOAST BİLDİRİM ---
+        window.showToast = function(msg, title = "Konsey Mührü") {
+            const box = document.getElementById('toastBox');
+            document.getElementById('toastTitle').innerText = title;
+            document.getElementById('toastMsg').innerText = msg;
+            box.classList.remove('translate-y-24', 'opacity-0');
+            setTimeout(() => {
+                box.classList.add('translate-y-24', 'opacity-0');
+            }, 3200);
+        };
+
+        // ==================== 1. GİRİŞ & KİMLİK DOĞRULAMA SİSTEMİ ====================
+
+        window.toggleLoginPassVisibility = function() {
+            const inp = document.getElementById('loginPassword');
+            const eye = document.getElementById('loginPassEye');
+            if (inp.type === 'password') {
+                inp.type = 'text';
+                eye.className = 'fa-solid fa-eye-slash text-xs text-council-gold';
+            } else {
+                inp.type = 'password';
+                eye.className = 'fa-solid fa-eye text-xs';
+            }
+        };
+
+        // Giriş ekranındaki üye seçme butonlarını çiz (ŞİFRELER GİZLİDİR, SADECE İSİM DOLDURUR)
+        function renderLoginHelperButtons() {
+            const box = document.getElementById('loginHelperAccounts');
+            if (!box) return;
+            box.innerHTML = '';
+            (councilState.members || []).forEach(m => {
+                const isBaronRole = m.role === 'Baron';
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'p-2 rounded-xl border text-left transition flex items-center justify-between ' +
+                    (isBaronRole ? 'bg-amber-950/40 border-council-gold/60 hover:bg-amber-900/50' : 'bg-black/60 border-gray-800 hover:border-gray-600');
+                btn.addEventListener('click', () => selectLoginMemberName(m.name));
+                btn.innerHTML = `
+                    <div class="truncate pr-1">
+                        <p class="text-xs font-bold ${isBaronRole ? 'text-council-gold' : 'text-gray-200'} truncate">
+                            ${isBaronRole ? '👑 ' : '🐺 '}${escapeHtml(m.name)}
+                        </p>
+                        <p class="text-[10px] text-gray-400 truncate">${escapeHtml(m.rank || m.role)}</p>
+                    </div>
+                    <i class="fa-solid fa-user-check text-xs ${isBaronRole ? 'text-council-gold' : 'text-gray-500'}"></i>
+                `;
+                box.appendChild(btn);
+            });
+        }
+
+        window.selectLoginMemberName = function(username) {
+            document.getElementById('loginUsername').value = username;
+            const passInput = document.getElementById('loginPassword');
+            passInput.value = '';
+            passInput.focus();
+            document.getElementById('gateError').classList.add('hidden');
+        };
+
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const uName = document.getElementById('loginUsername').value.trim();
+            const uPass = document.getElementById('loginPassword').value.trim();
+
+            // Veritabanında kullanıcıyı ara (İsim büyük/küçük harf duyarsız, şifre birebir)
+            const matchedMember = councilState.members.find(
+                m => m.name.toLowerCase() === uName.toLowerCase() && String(m.password) === String(uPass)
+            );
+
+            if (!matchedMember) {
+                const errBox = document.getElementById('gateError');
+                const nameExists = councilState.members.find(m => m.name.toLowerCase() === uName.toLowerCase());
+                if (nameExists) {
+                    document.getElementById('gateErrorText').innerText = `"${nameExists.name}" için girdiğin şifre yanlış!`;
+                } else {
+                    document.getElementById('gateErrorText').innerText = `"${uName}" adında bir konsey üyesi bulunamadı! Sadece Baron üye ekleyebilir.`;
+                }
+                errBox.classList.remove('hidden');
+                playCouncilSound('gavel');
+                return;
+            }
+
+            // Başarılı Giriş
+            loginSuccess(matchedMember);
+        });
+
+        function loginSuccess(member) {
+            loggedInMember = member;
+            try {
+                localStorage.setItem(SESSION_KEY, member.id);
+            } catch (e) {}
+
+            document.getElementById('gateError').classList.add('hidden');
+            document.getElementById('gateScreen').classList.add('hidden');
+            document.getElementById('mainPortal').classList.remove('hidden');
+
+            playCouncilSound('gate');
+            updateHeaderAndPermissions();
+            renderAll();
+            initVoicePeerSystem();
+            showToast(`Masaya hoş geldin, ${member.name} [${member.role}]!`, "Giriş Başarılı");
+        }
+
+        window.logoutCouncil = function() {
+            disconnectVoiceCall();
+            if (peerInstance) {
+                try { peerInstance.destroy(); } catch (e) {}
+                peerInstance = null;
+            }
+            loggedInMember = null;
+            try {
+                localStorage.removeItem(SESSION_KEY);
+            } catch (e) {}
+            document.getElementById('loginPassword').value = '';
+            document.getElementById('mainPortal').classList.add('hidden');
+            document.getElementById('gateScreen').classList.remove('hidden');
+            renderLoginHelperButtons();
+            switchPage('masa');
+        };
+
+        // ==================== ŞİFRELİ SESLİ KONUŞMA (TELSİZ / WEBRTC) SİSTEMİ ====================
+        let peerInstance = null;
+        let myPeerId = '';
+        let localAudioStream = null;
+        let activeMediaCall = null;
+        let pendingIncomingCall = null;
+        let isMicMuted = false;
+        let audioVisualizerInterval = null;
+
+        function sanitizePeerCode(name) {
+            return String(name || 'UYE')
+                .toUpperCase()
+                .replace(/[^A-Z0-9]/g, '')
+                .slice(0, 10);
+        }
+
+        function initVoicePeerSystem() {
+            if (!loggedInMember || typeof Peer === 'undefined') return;
+            if (peerInstance && !peerInstance.destroyed) return;
+
+            const randomSuffix = Math.floor(100 + Math.random() * 900);
+            const customId = `KK-${sanitizePeerCode(loggedInMember.name)}-${randomSuffix}`;
+
+            try {
+                peerInstance = new Peer(customId);
+
+                peerInstance.on('open', (id) => {
+                    myPeerId = id;
+                    const disp = document.getElementById('myPeerIdDisplay');
+                    if (disp) disp.value = id;
+                    const st = document.getElementById('voiceStatusText');
+                    if (st) st.innerText = 'Telsiz frekansı hazır. Arama yapabilirsin.';
+                });
+
+                peerInstance.on('call', (call) => {
+                    pendingIncomingCall = call;
+                    const incModal = document.getElementById('incomingCallModal');
+                    const callerSpan = document.getElementById('incomingCallerId');
+                    if (callerSpan) callerSpan.innerText = call.peer;
+                    if (incModal) incModal.classList.remove('hidden');
+                    playCouncilSound('gavel');
+                    showToast(`📞 ${call.peer} seni sesli telsiz hattından arıyor!`, "Gelen Sesli Çağrı");
+                });
+
+                peerInstance.on('error', (err) => {
+                    console.warn("Telsiz bağlantı uyarısı:", err);
+                    showToast("Telsiz frekans uyarısı: Karşı tarafın kodu doğru mu kontrol et.", "Telsiz Hattı");
+                });
+            } catch (e) {
+                console.warn("Peer başlatılamadı:", e);
+            }
+        }
+
+        async function getMicrophoneStream() {
+            if (localAudioStream) return localAudioStream;
+            localAudioStream = await navigator.mediaDevices.getUserMedia({
+                audio: {
+                    echoCancellation: true,
+                    noiseSuppression: true,
+                    autoGainControl: true
+                },
+                video: false
+            });
+            startMicVisualizer(localAudioStream);
+            return localAudioStream;
+        }
+
+        function startMicVisualizer(stream) {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const source = audioCtx.createMediaStreamSource(stream);
+                const analyser = audioCtx.createAnalyser();
+                analyser.fftSize = 256;
+                source.connect(analyser);
+                const dataArray = new Uint8Array(analyser.frequencyBinCount);
+
+                if (audioVisualizerInterval) clearInterval(audioVisualizerInterval);
+                audioVisualizerInterval = setInterval(() => {
+                    if (isMicMuted || !localAudioStream) {
+                        const bar = document.getElementById('micLevelBar');
+                        if (bar) bar.style.width = '0%';
+                        return;
+                    }
+                    analyser.getByteFrequencyData(dataArray);
+                    let sum = 0;
+                    for (let i = 0; i < dataArray.length; i++) sum += dataArray[i];
+                    const avg = sum / dataArray.length;
+                    const pct = Math.min(100, Math.round((avg / 90) * 100));
+                    const bar = document.getElementById('micLevelBar');
+                    if (bar) bar.style.width = `${pct}%`;
+                }, 90);
+            } catch (e) {}
+        }
+
+        window.connectVoiceCall = async function() {
+            const targetId = document.getElementById('remotePeerIdInput').value.trim();
+            if (!targetId) {
+                showToast("Lütfen arkadaşının Telsiz Frekans Kodunu gir!", "Uyarı");
+                return;
+            }
+            if (targetId === myPeerId) {
+                showToast("Kendi frekans kodunu arayamazsın!", "Uyarı");
+                return;
+            }
+
+            try {
+                document.getElementById('voiceStatusText').innerText = `${targetId} aranıyor, mikrofon açılıyor...`;
+                const stream = await getMicrophoneStream();
+                const call = peerInstance.call(targetId, stream);
+                setupCallEvents(call, targetId);
+                showToast(`${targetId} frekansına sesli çağrı gönderildi...`, "Telsiz Çağrısı");
+            } catch (err) {
+                showToast("Mikrofon izni alınamadı! Tarayıcıdan mikrofona izin verin.", "Mikrofon Hatası");
+            }
+        };
+
+        window.acceptIncomingCall = async function() {
+            if (!pendingIncomingCall) return;
+            document.getElementById('incomingCallModal').classList.add('hidden');
+            try {
+                const stream = await getMicrophoneStream();
+                pendingIncomingCall.answer(stream);
+                setupCallEvents(pendingIncomingCall, pendingIncomingCall.peer);
+                pendingIncomingCall = null;
+            } catch (err) {
+                showToast("Mikrofon izni verilmediği için çağrı yanıtlanamadı.", "Mikrofon Hatası");
+            }
+        };
+
+        window.rejectIncomingCall = function() {
+            if (pendingIncomingCall) {
+                try { pendingIncomingCall.close(); } catch (e) {}
+                pendingIncomingCall = null;
+            }
+            document.getElementById('incomingCallModal').classList.add('hidden');
+            showToast("Gelen telsiz çağrısı reddedildi.");
+        };
+
+        function setupCallEvents(call, remotePeerName) {
+            if (activeMediaCall) {
+                try { activeMediaCall.close(); } catch (e) {}
+            }
+            activeMediaCall = call;
+
+            call.on('stream', (remoteStream) => {
+                const audioEl = document.getElementById('remoteAudioPlayer');
+                if (audioEl) {
+                    audioEl.srcObject = remoteStream;
+                    audioEl.play().catch(() => {});
+                }
+                updateVoiceUIState(true, remotePeerName);
+                playCouncilSound('gate');
+                showToast(`🎙️ ${remotePeerName} ile sesli bağlantı kuruldu!`, "Canlı Telsiz Aktif");
+            });
+
+            call.on('close', () => {
+                updateVoiceUIState(false);
+                showToast("Sesli telsiz görüşmesi sonlandı.");
+            });
+
+            call.on('error', () => {
+                updateVoiceUIState(false);
+            });
+        }
+
+        function updateVoiceUIState(isConnected, remotePeerName = '') {
+            const badge = document.getElementById('voiceLiveBadge');
+            const statusText = document.getElementById('voiceStatusText');
+            const muteBtn = document.getElementById('toggleMuteBtn');
+            const endBtn = document.getElementById('endCallBtn');
+            const micLabel = document.getElementById('micStateLabel');
+            const partList = document.getElementById('voiceParticipantsList');
+
+            if (isConnected) {
+                badge.classList.remove('hidden');
+                statusText.innerText = `${remotePeerName} ile sesli hattasın`;
+                muteBtn.disabled = false;
+                endBtn.disabled = false;
+                micLabel.innerText = isMicMuted ? 'Sessizde' : 'Canlı İletimde';
+                micLabel.className = 'text-[11px] text-emerald-400 font-bold';
+
+                partList.innerHTML = `
+                    <div class="flex items-center justify-between p-2 rounded-lg bg-emerald-950/40 border border-emerald-700/50 text-xs">
+                        <span class="font-bold text-white flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                            ${escapeHtml(loggedInMember ? loggedInMember.name : 'Sen')} (Sen)
+                        </span>
+                        <span class="text-[10px] text-emerald-300">Mikrofon Aktif</span>
+                    </div>
+                    <div class="flex items-center justify-between p-2 rounded-lg bg-amber-950/40 border border-council-gold/50 text-xs">
+                        <span class="font-bold text-council-gold flex items-center gap-1.5">
+                            <i class="fa-solid fa-volume-high"></i>
+                            ${escapeHtml(remotePeerName)}
+                        </span>
+                        <span class="text-[10px] text-amber-300">Bağlı</span>
+                    </div>
+                `;
+            } else {
+                badge.classList.add('hidden');
+                statusText.innerText = 'Telsiz frekansı hazır. Arama yapabilirsin.';
+                muteBtn.disabled = true;
+                endBtn.disabled = true;
+                micLabel.innerText = 'Kapalı';
+                micLabel.className = 'text-[11px] text-gray-500';
+                const bar = document.getElementById('micLevelBar');
+                if (bar) bar.style.width = '0%';
+                partList.innerHTML = `<p class="text-[11px] text-gray-500 italic">Henüz aktif sesli bağlantı yok.</p>`;
+            }
+        }
+
+        window.toggleMicrophoneMute = function() {
+            if (!localAudioStream) return;
+            isMicMuted = !isMicMuted;
+            localAudioStream.getAudioTracks().forEach(track => {
+                track.enabled = !isMicMuted;
+            });
+            const icon = document.getElementById('muteBtnIcon');
+            const text = document.getElementById('muteBtnText');
+            const micLabel = document.getElementById('micStateLabel');
+            if (isMicMuted) {
+                icon.className = 'fa-solid fa-microphone-slash text-red-400';
+                text.innerText = 'Sesi Aç';
+                micLabel.innerText = 'Sessize Alındı';
+            } else {
+                icon.className = 'fa-solid fa-microphone text-emerald-400';
+                text.innerText = 'Sesi Kapat';
+                micLabel.innerText = 'Canlı İletimde';
+            }
+        };
+
+        window.disconnectVoiceCall = function() {
+            if (activeMediaCall) {
+                try { activeMediaCall.close(); } catch (e) {}
+                activeMediaCall = null;
+            }
+            if (localAudioStream) {
+                localAudioStream.getTracks().forEach(t => t.stop());
+                localAudioStream = null;
+            }
+            if (audioVisualizerInterval) {
+                clearInterval(audioVisualizerInterval);
+                audioVisualizerInterval = null;
+            }
+            isMicMuted = false;
+            updateVoiceUIState(false);
+        };
+
+        window.copyMyVoiceId = function() {
+            const inp = document.getElementById('myPeerIdDisplay');
+            if (!inp || !myPeerId) return;
+            inp.select();
+            document.execCommand('copy');
+            showToast(`Frekans kodun kopyalandı: ${myPeerId}`, "Kopyalandı");
+        };
+
+        window.shareMyFreqToChat = async function() {
+            if (!loggedInMember || !myPeerId) return;
+            const now = new Date();
+            const timeStr = now.toTimeString().slice(0, 5);
+            if (!Array.isArray(councilState.chats)) councilState.chats = [];
+            councilState.chats.push({
+                id: 'c-' + Date.now(),
+                sender: loggedInMember.name,
+                role: loggedInMember.role,
+                text: `🎙️ Sesli Telsiz Hattındayım! Bağlanmak için Frekans Kodum: ${myPeerId}`,
+                time: timeStr
+            });
+            playCouncilSound('click');
+            await persistState("Telsiz frekans kodun sohbete gönderildi!");
+        };
+
+        // ==================== KODLARI 3 AYRI DOSYAYA (HTML / CSS / JS) BÖLÜP İNDİRME ====================
+        window.downloadSeparatedFile = function(fileType) {
+            let content = '';
+            let filename = '';
+            let mime = 'text/plain;charset=utf-8';
+
+            const styleEl = document.querySelector('style');
+            const scriptEl = document.querySelector('script[type="module"]');
+
+            if (fileType === 'css') {
+                content = styleEl ? styleEl.innerHTML.trim() : '';
+                filename = 'style.css';
+                mime = 'text/css;charset=utf-8';
+            } else if (fileType === 'js') {
+                content = scriptEl ? scriptEl.innerHTML.trim() : '';
+                filename = 'app.js';
+                mime = 'application/javascript;charset=utf-8';
+            } else if (fileType === 'html') {
+                const clone = document.documentElement.cloneNode(true);
+                const cloneStyle = clone.querySelector('style');
+                if (cloneStyle) {
+                    const linkTag = document.createElement('link');
+                    linkTag.rel = 'stylesheet';
+                    linkTag.href = 'style.css';
+                    cloneStyle.parentNode.replaceChild(linkTag, cloneStyle);
+                }
+                const cloneScript = clone.querySelector('script[type="module"]');
+                if (cloneScript) {
+                    const extScript = document.createElement('script');
+                    extScript.type = 'module';
+                    extScript.src = 'app.js';
+                    cloneScript.parentNode.replaceChild(extScript, cloneScript);
+                }
+                content = '<!DOCTYPE html>\n' + clone.outerHTML;
+                filename = 'index.html';
+                mime = 'text/html;charset=utf-8';
+            }
+
+            const blob = new Blob([content], { type: mime });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast(`${filename} dosyası indirildi!`, "Dosya Hazır");
+        };
+
+        // ==================== GEMINI LLM API ENTEGRASYONU (BAŞMÜŞAVİR & AI VAKA ÜRETİCİ) ====================
+        const apiKey = "";
+        const GEMINI_MODEL = "gemini-3-flash-preview";
+
+        async function callGeminiAPI(userPrompt, systemInstructionText, responseSchema = null) {
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${apiKey}`;
+            const payload = {
+                contents: [{ role: "user", parts: [{ text: userPrompt }] }],
+                systemInstruction: { parts: [{ text: systemInstructionText }] }
+            };
+
+            if (responseSchema) {
+                payload.generationConfig = {
+                    responseMimeType: "application/json",
+                    responseSchema: responseSchema
+                };
+            }
+
+            const delays = [1000, 2000, 4000, 8000, 16000];
+            for (let attempt = 0; attempt <= delays.length; attempt++) {
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}`);
+                    }
+                    const result = await response.json();
+                    const text = result?.candidates?.[0]?.content?.parts?.[0]?.text;
+                    if (!text) throw new Error("Empty response");
+                    return text;
+                } catch (err) {
+                    if (attempt === delays.length) throw err;
+                    await new Promise(r => setTimeout(r, delays[attempt]));
+                }
+            }
+        }
+
+        // 1. AI İle Özgün Dedektiflik Vakası Üretme (Structured JSON Output)
+        window.generateAiDetectiveCase = async function() {
+            const btn = document.getElementById('aiGenerateCaseBtn');
+            if (!btn) return;
+            const origHtml = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-council-gold"></i> AI Vaka Kurguluyor...`;
+
+            const memberNames = (councilState.members || []).map(m => m.name).join(', ');
+            const sysInstruction = "Sen Kurtlar Konseyi'nin baş istihbarat yazarısın. Türkçe, atmosferik, zekice kurgulanmış bir mafya/konsey cinayet veya köstebek vakası üret. 4 delil ve 4 şüpheli olsun. Sadece 1 şüphelinin isKiller değeri true olsun ve delillerle şüphelilerin çapraz sorgu ifadeleri arasında mantıksal bir çelişki bulunsun.";
+            const prompt = `Kurtlar Konseyi için İstanbul'da (örneğin Çamlıca, Galata, Kandilli, Büyükada veya Tuzla Tersanesi gibi farklı bir mekanda) geçen yepyeni bir cinayet/suikast vakası oluştur. Konsey üyelerimiz (${memberNames}) bu vakayı çözecek. Şüpheliler kurgusal karakterler olsun.`;
+
+            const schema = {
+                type: "OBJECT",
+                properties: {
+                    number: { type: "STRING" },
+                    title: { type: "STRING" },
+                    difficulty: { type: "STRING" },
+                    location: { type: "STRING" },
+                    time: { type: "STRING" },
+                    victim: { type: "STRING" },
+                    cause: { type: "STRING" },
+                    story: { type: "STRING" },
+                    clues: {
+                        type: "ARRAY",
+                        items: {
+                            type: "OBJECT",
+                            properties: {
+                                id: { type: "STRING" },
+                                title: { type: "STRING" },
+                                icon: { type: "STRING" },
+                                detail: { type: "STRING" }
+                            },
+                            propertyOrdering: ["id", "title", "icon", "detail"]
+                        }
+                    },
+                    suspects: {
+                        type: "ARRAY",
+                        items: {
+                            type: "OBJECT",
+                            properties: {
+                                id: { type: "STRING" },
+                                name: { type: "STRING" },
+                                role: { type: "STRING" },
+                                avatar: { type: "STRING" },
+                                alibi: { type: "STRING" },
+                                statement: { type: "STRING" },
+                                isKiller: { type: "BOOLEAN" }
+                            },
+                            propertyOrdering: ["id", "name", "role", "avatar", "alibi", "statement", "isKiller"]
+                        }
+                    },
+                    solutionExplanation: { type: "STRING" }
+                },
+                propertyOrdering: ["number", "title", "difficulty", "location", "time", "victim", "cause", "story", "clues", "suspects", "solutionExplanation"]
+            };
+
+            try {
+                const jsonStr = await callGeminiAPI(prompt, sysInstruction, schema);
+                const newCase = JSON.parse(jsonStr);
+                newCase.id = 'case-ai-' + Date.now();
+                // İkonları güvenli FontAwesome sınıflarına sabitle
+                const safeIcons = ['fa-fingerprint', 'fa-video', 'fa-vial', 'fa-file-shield'];
+                if (Array.isArray(newCase.clues)) {
+                    newCase.clues.forEach((c, i) => {
+                        c.id = 'c' + (i + 1);
+                        c.icon = safeIcons[i % safeIcons.length];
+                    });
+                }
+                if (Array.isArray(newCase.suspects)) {
+                    // En az 1 katil olduğundan emin ol
+                    if (!newCase.suspects.some(s => s.isKiller)) {
+                        newCase.suspects[0].isKiller = true;
+                    }
+                    newCase.suspects.forEach((s, i) => {
+                        s.id = 's' + (i + 1);
+                    });
+                }
+
+                DETECTIVE_CASES.unshift(newCase);
+                activeDetectiveCase = newCase;
+                revealedClues = new Set();
+                interrogatedSuspects = new Set();
+                caseSolvedInCurrentSession = false;
+
+                const verdictBox = document.getElementById('detVerdictBox');
+                if (verdictBox) verdictBox.classList.add('hidden');
+
+                const logBox = document.getElementById('detInvestigationLog');
+                if (logBox) {
+                    logBox.innerHTML = `
+                        <div class="p-2.5 rounded-lg bg-purple-950/50 border border-purple-500/50 text-gray-200">
+                            <span class="text-council-gold font-bold">[✨ GEMINI AI ÖZEL VAKA]</span> "${escapeHtml(activeDetectiveCase.title)}" vakası yapay zeka tarafından sıfırdan kurgulandı!
+                        </div>
+                    `;
+                }
+                playCouncilSound('gavel');
+                renderDetectivePage();
+                showToast("✨ Gemini AI yeni bir istihbarat vakası kurguladı!", "AI Vaka Hazır");
+            } catch (err) {
+                showToast("AI vaka üretirken bağlantı hatası oluştu, hazır vakalardan biri seçiliyor.", "Bilgi");
+                selectRandomDetectiveCase();
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = origHtml;
+            }
+        };
+
+        // 2. Dedektiflik Vakası İçin AI İstihbarat Analizi (İpucu)
+        window.askAiDetectiveHint = async function() {
+            if (!activeDetectiveCase) return;
+            const btn = document.getElementById('aiHintBtn');
+            const orig = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Analiz...`;
+
+            try {
+                const sys = "Sen Kurtlar Konseyi'nin Başdedektif Müşavirisin. Katilin ismini doğrudan söylemeden, olaydaki en kritik çelişkiye dikkat çeken 2 cümlelik karizmatik bir istihbarat ipucu ver.";
+                const prompt = `Vaka: ${activeDetectiveCase.title}. Özet: ${activeDetectiveCase.story}. Deliller: ${activeDetectiveCase.clues.map(c => c.detail).join(' | ')}. Katili doğrudan söylemeden dedektiflere ince bir ipucu ver.`;
+                const hint = await callGeminiAPI(prompt, sys);
+                appendDetectiveLog("✨ BAŞMÜŞAVİR AI ANALİZİ", hint.trim(), "text-purple-400");
+                playCouncilSound('click');
+            } catch (e) {
+                showToast("İstihbarat analizi şu an alınamadı.", "Uyarı");
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = orig;
+            }
+        };
+
+        // 3. Baron İçin AI Ferman Yazıcı
+        window.generateAiBaronDecree = async function() {
+            const btn = document.getElementById('aiDecreeBtn');
+            const inp = document.getElementById('decreeInput');
+            if (!btn || !inp) return;
+            const orig = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Yazılıyor...`;
+
+            try {
+                const memberList = (councilState.members || []).map(m => m.name).join(', ');
+                const sys = "Sen Kurtlar Vadisi tarzında ağırbaşlı, karizmatik ve otoriter Konsey Baronu Kaptan'ın başdanışmanısın. Tek cümlelik veya iki cümlelik, dostluk, sadakat ve akşamki operasyon/oyun buluşması hakkında çok havalı bir Baron Fermanı yaz. Tırnak işareti kullanma.";
+                const prompt = `Konsey üyelerimiz: ${memberList}. Baron Kaptan ağzından konsey masasına yeni bir ferman yaz.`;
+                const decreeText = await callGeminiAPI(prompt, sys);
+                inp.value = decreeText.trim().replace(/^["']|["']$/g, '');
+                playCouncilSound('click');
+            } catch (e) {
+                showToast("Ferman üretilemedi.", "Uyarı");
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = orig;
+            }
+        };
+
+        // 4. Racon & Anayasa Köşesi İçin AI Racon Üretici
+        window.generateAiRaconQuote = async function() {
+            const btn = document.getElementById('aiGenerateRaconBtn');
+            if (!btn) return;
+            const orig = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Üretiliyor...`;
+
+            try {
+                const sys = "Sen Kurtlar Konseyi adlı yakın arkadaş grubunun anayasa yazarısın. Hem Kurtlar Vadisi gibi ağır racon içeren hem de arkadaş grubu/oyun/dostluk temalı efsanevi, tek cümlelik bir racon kuralı yaz. Sadece sözü döndür.";
+                const prompt = "Konsey anayasasına eklenecek yeni, özgün ve çok havalı bir racon maddesi yaz.";
+                const raconText = await callGeminiAPI(prompt, sys);
+                councilState.quotes.unshift({
+                    id: 'q-ai-' + Date.now(),
+                    text: raconText.trim().replace(/^["']|["']$/g, ''),
+                    author: `${loggedInMember ? loggedInMember.name : 'Kaptan'} & Başmüşavir AI`,
+                    likes: 5
+                });
+                playCouncilSound('gavel');
+                await persistState("✨ Başmüşavir AI yeni bir racon maddesini anayasaya kazıdı!");
+            } catch (e) {
+                showToast("AI racon üretemedi.", "Uyarı");
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = orig;
+            }
+        };
+
+        // 5. Gizli Sohbet Hattında Başmüşavir AI (Consigliere) Yanıtı
+        window.askAiConsigliereFromChat = async function(customQuestion = null) {
+            const btn = document.getElementById('askConsigliereBtn');
+            const orig = btn ? btn.innerHTML : '';
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Başmüşavir Düşünüyor...`;
+            }
+
+            try {
+                const recentChats = (councilState.chats || []).slice(-6).map(c => `${c.sender}: ${c.text}`).join('\n');
+                const membersInfo = (councilState.members || []).map(m => `${m.name} (${m.rank})`).join(', ');
+                const sys = `Sen "Başmüşavir AI" adında, Kurtlar Konseyi'nin bilge, ağırbaşlı, Kurtlar Vadisi raconuna hakim strateji danışmanısın. Konsey Baronu Kaptan'dır. Üyeler: ${membersInfo}. Kısa, karizmatik ve racona uygun (maksimum 2-3 cümle) cevap ver.`;
+                const prompt = customQuestion 
+                    ? `Üye ${loggedInMember ? loggedInMember.name : 'Kaptan'} sana şunu soruyor: "${customQuestion}"\nSon konuşmalar:\n${recentChats}`
+                    : `Son konuşmalara bakarak konseye bilgece bir strateji, yorum veya racon tavsiyesi ver:\n${recentChats}`;
+
+                const aiReply = await callGeminiAPI(prompt, sys);
+                const now = new Date().toTimeString().slice(0, 5);
+                councilState.chats.push({
+                    id: 'c-ai-' + Date.now(),
+                    sender: "Başmüşavir AI ✨",
+                    role: "Baron",
+                    text: aiReply.trim(),
+                    time: now
+                });
+                playCouncilSound('gavel');
+                await persistState("✨ Başmüşavir AI konseye görüşünü bildirdi.");
+            } catch (e) {
+                showToast("Başmüşavir AI şu an meşgul.", "Uyarı");
+            } finally {
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = orig;
+                }
+            }
+        };
+
+        // Sayfa yenilendiğinde oturumu açık tut ve yetkileri senkronize et
+        function syncActiveUserWithState() {
+            renderLoginHelperButtons();
+            if (!loggedInMember) {
+                try {
+                    const savedId = localStorage.getItem(SESSION_KEY);
+                    if (savedId) {
+                        const found = councilState.members.find(m => m.id === savedId);
+                        if (found) {
+                            loggedInMember = found;
+                            document.getElementById('gateScreen').classList.add('hidden');
+                            document.getElementById('mainPortal').classList.remove('hidden');
+                        }
+                    }
+                } catch (e) {}
+            } else {
+                // Eğer Baron bu kullanıcıyı sildiyse oturumu kapat, güncellediyse bilgilerini yenile
+                const updated = councilState.members.find(m => m.id === loggedInMember.id);
+                if (!updated) {
+                    logoutCouncil();
+                    return;
+                }
+                loggedInMember = updated;
+            }
+            if (loggedInMember) {
+                updateHeaderAndPermissions();
+            }
+        }
+
+        function isBaron() {
+            return loggedInMember && loggedInMember.role === 'Baron';
+        }
+
+        function updateHeaderAndPermissions() {
+            if (!loggedInMember) return;
+            const baronStatus = isBaron();
+
+            document.getElementById('activeUserName').innerText = loggedInMember.name;
+            document.getElementById('activeUserRank').innerText = loggedInMember.rank;
+            document.getElementById('headerUserAvatar').innerText = baronStatus ? '👑' : (loggedInMember.name.toLowerCase().includes('heisenberg') ? '🧪' : '🐺');
+
+            const roleBadge = document.getElementById('activeRoleBadge');
+            if (baronStatus) {
+                roleBadge.innerText = 'BARON • TAM YETKİ';
+                roleBadge.className = 'px-1.5 py-0.5 text-[9px] font-black uppercase rounded bg-council-gold text-black';
+            } else {
+                roleBadge.innerText = 'ÜYE';
+                roleBadge.className = 'px-1.5 py-0.5 text-[9px] font-bold uppercase rounded bg-red-950 text-red-300 border border-red-800';
+            }
+
+            // Baron'a Özel Butonların Görünürlüğü
+            document.getElementById('editDecreeBtn').className = baronStatus 
+                ? 'flex px-3.5 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-council-gold text-council-gold text-xs font-bold transition items-center gap-1.5'
+                : 'hidden';
+
+            document.getElementById('masaBaronAddBtn').className = baronStatus
+                ? 'flex px-4 py-2 rounded-xl bg-gradient-to-r from-amber-600 to-yellow-500 hover:from-amber-500 hover:to-yellow-400 text-black font-bold text-xs uppercase tracking-wider transition items-center gap-2 shadow-lg'
+                : 'hidden';
+
+            document.getElementById('clearChatBtn').className = baronStatus
+                ? 'block px-3 py-1.5 rounded-lg bg-red-950 hover:bg-red-900 text-red-300 border border-red-800/60 text-xs transition'
+                : 'hidden';
+
+            document.getElementById('baronLockIcon').className = baronStatus
+                ? 'fa-solid fa-unlock text-[10px] ml-0.5 text-emerald-400'
+                : 'fa-solid fa-lock text-[10px] ml-0.5 text-red-400';
+
+            // Baron Yönetim Sayfası Kilit Kontrolü
+            if (baronStatus) {
+                document.getElementById('baronLockedNotice').classList.add('hidden');
+                document.getElementById('baronAdminContent').classList.remove('hidden');
+            } else {
+                document.getElementById('baronLockedNotice').classList.remove('hidden');
+                document.getElementById('baronAdminContent').classList.add('hidden');
+                document.getElementById('lockedMemberName').innerText = loggedInMember.name;
+            }
+        }
+
+        // ==================== 2. ÇOKLU SAYFA GEÇİŞ SİSTEMİ ====================
+        window.switchPage = function(pageKey) {
+            playCouncilSound('click');
+            document.querySelectorAll('.page-view').forEach(el => el.classList.add('hidden'));
+            const target = document.getElementById(`page-${pageKey}`);
+            if (target) target.classList.remove('hidden');
+
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.className = "nav-btn py-3 px-3 rounded-xl font-cinzel text-xs sm:text-sm font-bold transition flex items-center justify-center gap-2 text-gray-400 hover:text-white hover:bg-white/5";
+            });
+
+            const activeBtn = document.getElementById(`navBtn-${pageKey}`);
+            if (activeBtn) {
+                activeBtn.className = "nav-btn py-3 px-3 rounded-xl font-cinzel text-xs sm:text-sm font-bold transition flex items-center justify-center gap-2 bg-gradient-to-r from-red-950 via-red-900/80 to-red-950 text-council-gold border border-council-gold/50 shadow-md";
+            }
+
+            if (pageKey === 'sohbet') {
+                const chatBox = document.getElementById('chatMessagesBox');
+                if (chatBox) chatBox.scrollTop = chatBox.scrollHeight;
+            }
+        };
+
+        // ==================== 3. TÜM SAYFALARI RENDER ETME ====================
+        function renderAll() {
+            renderLoginHelperButtons();
+            document.getElementById('baronDecreeText').innerText = `"${councilState.decree || 'Konsey oturumu açıktır.'}"`;
+            renderMasaPage();
+            renderPollsPage();
+            renderRaconAndBountiesPage();
+            renderChatPage();
+            renderDetectivePage();
+            renderBaronAdminPage();
+        }
+
+        // --- SAYFA 5: DEDEKTİFLİK OYUNU (KATİLİ BUL) MANTIĞI ---
+        window.selectRandomDetectiveCase = function() {
+            if (!DETECTIVE_CASES || DETECTIVE_CASES.length === 0) return;
+            let pool = DETECTIVE_CASES;
+            if (activeDetectiveCase && DETECTIVE_CASES.length > 1) {
+                pool = DETECTIVE_CASES.filter(c => c.id !== activeDetectiveCase.id);
+            }
+            const randomIndex = Math.floor(Math.random() * pool.length);
+            activeDetectiveCase = pool[randomIndex];
+            revealedClues = new Set();
+            interrogatedSuspects = new Set();
+            caseSolvedInCurrentSession = false;
+
+            const verdictBox = document.getElementById('detVerdictBox');
+            if (verdictBox) verdictBox.classList.add('hidden');
+
+            const logBox = document.getElementById('detInvestigationLog');
+            if (logBox) {
+                logBox.innerHTML = `
+                    <div class="p-2.5 rounded-lg bg-red-950/40 border border-red-800/50 text-gray-200">
+                        <span class="text-council-gold font-bold">[YENİ DOSYA AÇILDI]</span> "${escapeHtml(activeDetectiveCase.title)}" vakası masaya getirildi. Önce 4 delili incele ve şüphelileri sorgula!
+                    </div>
+                `;
+            }
+
+            playCouncilSound('click');
+            renderDetectivePage();
+        };
+
+        function appendDetectiveLog(badge, text, colorClass = "text-council-gold") {
+            const logBox = document.getElementById('detInvestigationLog');
+            if (!logBox) return;
+            const entry = document.createElement('div');
+            entry.className = "p-2.5 rounded-lg bg-council-dark border border-gray-800 text-gray-200 space-y-1";
+            entry.innerHTML = `
+                <div class="font-bold ${colorClass}">${escapeHtml(badge)}</div>
+                <p class="text-[11px] text-gray-300 leading-relaxed">${escapeHtml(text)}</p>
+            `;
+            logBox.prepend(entry);
+        }
+
+        function renderDetectivePage() {
+            if (!activeDetectiveCase) {
+                activeDetectiveCase = DETECTIVE_CASES[0];
+            }
+            const c = activeDetectiveCase;
+
+            const numBadge = document.getElementById('detCaseNumberBadge');
+            if (!numBadge) return;
+
+            numBadge.innerText = c.number;
+            document.getElementById('detCaseDifficulty').innerText = `Zorluk: ${c.difficulty}`;
+            document.getElementById('detCaseTitle').innerText = c.title;
+            document.getElementById('detCaseLocation').innerText = c.location;
+            document.getElementById('detCaseTime').innerText = c.time;
+            document.getElementById('detCaseStory').innerText = c.story;
+            document.getElementById('detCaseVictim').innerText = c.victim;
+            document.getElementById('detCaseCause').innerText = c.cause;
+            document.getElementById('detClueCounter').innerText = `İncelenen Delil: ${revealedClues.size} / ${c.clues.length}`;
+
+            // Delilleri Çiz
+            const cluesGrid = document.getElementById('detCluesGrid');
+            cluesGrid.innerHTML = '';
+            c.clues.forEach((clue, idx) => {
+                const isRevealed = revealedClues.has(clue.id);
+                const card = document.createElement('div');
+                card.className = `p-3.5 rounded-xl border transition cursor-pointer flex flex-col justify-between gap-2 ${
+                    isRevealed 
+                        ? 'bg-amber-950/25 border-council-gold/60' 
+                        : 'bg-black/60 border-gray-800 hover:border-council-gold/40'
+                }`;
+                card.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold ${isRevealed ? 'text-council-gold' : 'text-gray-300'} flex items-center gap-2">
+                            <i class="fa-solid ${clue.icon} ${isRevealed ? 'text-council-gold' : 'text-red-500'}"></i>
+                            Delil #${idx + 1}: ${escapeHtml(clue.title)}
+                        </span>
+                        <span class="text-[10px] px-2 py-0.5 rounded ${isRevealed ? 'bg-emerald-950 text-emerald-300 border border-emerald-700/50' : 'bg-gray-900 text-gray-400'}">
+                            ${isRevealed ? 'İncelendi' : 'Tıkla & İncele'}
+                        </span>
+                    </div>
+                    <p class="text-xs ${isRevealed ? 'text-gray-200' : 'text-gray-500 italic'}">
+                        ${isRevealed ? escapeHtml(clue.detail) : 'Bu delil henüz incelenmedi. Laboratuvar raporunu görmek için tıkla.'}
+                    </p>
+                `;
+                card.addEventListener('click', () => {
+                    if (!revealedClues.has(clue.id)) {
+                        revealedClues.add(clue.id);
+                        playCouncilSound('click');
+                        appendDetectiveLog(`🔍 DELİL BULUNDU: ${clue.title}`, clue.detail, "text-amber-400");
+                        renderDetectivePage();
+                    }
+                });
+                cluesGrid.appendChild(card);
+            });
+
+            // Şüphelileri Çiz
+            const suspectsGrid = document.getElementById('detSuspectsGrid');
+            suspectsGrid.innerHTML = '';
+            c.suspects.forEach(sus => {
+                const isInterrogated = interrogatedSuspects.has(sus.id);
+                const sCard = document.createElement('div');
+                sCard.className = 'p-4 rounded-xl bg-black/60 border border-gray-800 hover:border-gray-700 flex flex-col justify-between gap-3';
+                sCard.innerHTML = `
+                    <div class="space-y-2.5">
+                        <div class="flex items-center gap-3">
+                            <div class="w-11 h-11 rounded-xl bg-red-950/60 border border-council-gold/40 flex items-center justify-center text-2xl shrink-0">
+                                ${sus.avatar}
+                            </div>
+                            <div>
+                                <h5 class="font-cinzel font-bold text-sm text-white">${escapeHtml(sus.name)}</h5>
+                                <p class="text-[11px] text-council-gold">${escapeHtml(sus.role)}</p>
+                            </div>
+                        </div>
+
+                        <div class="text-xs bg-council-dark p-2.5 rounded-lg border border-gray-800/80 text-gray-300">
+                            <span class="text-gray-500 font-bold">İlk Beyanı:</span> "${escapeHtml(sus.alibi)}"
+                        </div>
+
+                        ${isInterrogated ? `
+                        <div class="text-xs bg-amber-950/30 p-2.5 rounded-lg border border-council-gold/40 text-amber-100">
+                            <span class="text-council-gold font-bold"><i class="fa-solid fa-bolt mr-1"></i>Çapraz Sorgu İfadesi:</span> "${escapeHtml(sus.statement)}"
+                        </div>
+                        ` : ''}
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2 pt-2 border-t border-gray-800/80">
+                        <button data-interrogate="${sus.id}" class="py-2 px-2.5 rounded-lg ${isInterrogated ? 'bg-gray-800 text-gray-300' : 'bg-amber-600/20 hover:bg-amber-600/30 border border-council-gold/50 text-council-gold'} text-xs font-bold transition flex items-center justify-center gap-1.5">
+                            <i class="fa-solid fa-comments"></i> ${isInterrogated ? 'Sorgulandı' : 'Sorguya Çek'}
+                        </button>
+                        <button data-accuse="${sus.id}" ${caseSolvedInCurrentSession ? 'disabled' : ''} class="py-2 px-2.5 rounded-lg bg-gradient-to-r from-red-800 to-red-700 hover:from-red-700 hover:to-red-600 disabled:opacity-40 text-white text-xs font-bold transition flex items-center justify-center gap-1.5">
+                            <i class="fa-solid fa-handcuffs"></i> Katil Bu!
+                        </button>
+                    </div>
+                `;
+                suspectsGrid.appendChild(sCard);
+            });
+
+            suspectsGrid.querySelectorAll('[data-interrogate]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const sId = btn.getAttribute('data-interrogate');
+                    const sus = c.suspects.find(x => x.id === sId);
+                    if (!sus) return;
+                    interrogatedSuspects.add(sId);
+                    playCouncilSound('click');
+                    appendDetectiveLog(`🎙️ SORGU KAYDI: ${sus.name}`, sus.statement, "text-emerald-400");
+                    renderDetectivePage();
+                });
+            });
+
+            suspectsGrid.querySelectorAll('[data-accuse]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const sId = btn.getAttribute('data-accuse');
+                    accuseSuspect(sId);
+                });
+            });
+
+            renderDetectiveLeaderboard();
+        }
+
+        async function accuseSuspect(suspectId) {
+            if (!activeDetectiveCase || caseSolvedInCurrentSession) return;
+            const suspect = activeDetectiveCase.suspects.find(s => s.id === suspectId);
+            if (!suspect) return;
+
+            const userName = loggedInMember ? loggedInMember.name : 'Misafir Dedektif';
+            if (!councilState.detectiveScores) councilState.detectiveScores = {};
+            if (!councilState.detectiveScores[userName]) {
+                councilState.detectiveScores[userName] = { solved: 0, wrong: 0, points: 0 };
+            }
+
+            const verdictBox = document.getElementById('detVerdictBox');
+            const verdictIcon = document.getElementById('detVerdictIcon');
+            const verdictTitle = document.getElementById('detVerdictTitle');
+            const verdictSub = document.getElementById('detVerdictSub');
+            const verdictExp = document.getElementById('detVerdictExplanation');
+
+            verdictBox.classList.remove('hidden');
+
+            if (suspect.isKiller) {
+                caseSolvedInCurrentSession = true;
+                councilState.detectiveScores[userName].solved += 1;
+                councilState.detectiveScores[userName].points += 100;
+
+                verdictBox.className = "rounded-2xl p-5 border border-emerald-500/70 bg-emerald-950/30 space-y-3 transition-all";
+                verdictIcon.className = "w-11 h-11 rounded-xl bg-emerald-600 text-black flex items-center justify-center text-xl shrink-0";
+                verdictIcon.innerHTML = `<i class="fa-solid fa-check-double"></i>`;
+                verdictTitle.className = "font-cinzel text-base font-black text-emerald-400";
+                verdictTitle.innerText = `TEBRİKLER! KATİLİ YAKALADIN (${suspect.name})`;
+                verdictSub.innerText = `${userName} +100 İstihbarat Puanı kazandı!`;
+                verdictExp.innerText = activeDetectiveCase.solutionExplanation;
+
+                appendDetectiveLog(`✅ VAKA ÇÖZÜLDÜ!`, `${userName}, gerçek katil olan ${suspect.name} isimli şüpheliyi suçüstü yakaladı!`, "text-emerald-400");
+                playCouncilSound('gavel');
+                await persistState(`Tebrikler ${userName}! Gerçek katili buldun (+100 Puan).`);
+            } else {
+                councilState.detectiveScores[userName].wrong += 1;
+                councilState.detectiveScores[userName].points = Math.max(0, councilState.detectiveScores[userName].points - 25);
+
+                verdictBox.className = "rounded-2xl p-5 border border-red-500/70 bg-red-950/30 space-y-3 transition-all";
+                verdictIcon.className = "w-11 h-11 rounded-xl bg-red-700 text-white flex items-center justify-center text-xl shrink-0";
+                verdictIcon.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i>`;
+                verdictTitle.className = "font-cinzel text-base font-black text-red-400";
+                verdictTitle.innerText = `YANLIŞ SUÇLAMA! (${suspect.name} Masum)`;
+                verdictSub.innerText = `Delilleri ve sorgu ifadelerini tekrar dikkatlice karşılaştır! (-25 Puan)`;
+                verdictExp.innerText = `${suspect.name} bu cinayeti işlemedi. İpucu: Olay yerindeki 4 delilin tamamını açıp çapraz sorgu ifadelerindeki çelişkiye dikkat et!`;
+
+                appendDetectiveLog(`❌ YANLIŞ ŞÜPHELİ: ${suspect.name}`, `Deliller ${suspect.name} isimli kişinin katil olmadığını gösteriyor. Diğer şüphelileri incele!`, "text-red-400");
+                playCouncilSound('gavel');
+                await persistState(`Yanlış şüpheli! ${suspect.name} masum çıktı.`);
+            }
+        }
+
+        function renderDetectiveLeaderboard() {
+            const list = document.getElementById('detLeaderboardList');
+            if (!list) return;
+            list.innerHTML = '';
+
+            const scoresObj = councilState.detectiveScores || {};
+            const entries = Object.keys(scoresObj).map(name => ({
+                name,
+                solved: scoresObj[name].solved || 0,
+                wrong: scoresObj[name].wrong || 0,
+                points: scoresObj[name].points || 0
+            })).sort((a, b) => b.points - a.points);
+
+            if (entries.length === 0) {
+                list.innerHTML = `<p class="text-xs text-gray-500 italic">Henüz çözülen vaka yok.</p>`;
+                return;
+            }
+
+            entries.forEach((item, index) => {
+                const row = document.createElement('div');
+                row.className = "p-2.5 rounded-xl bg-black/60 border border-gray-800 flex items-center justify-between text-xs";
+                const medal = index === 0 ? '🥇' : (index === 1 ? '🥈' : (index === 2 ? '🥉' : '🕵️'));
+                row.innerHTML = `
+                    <div class="flex items-center gap-2">
+                        <span>${medal}</span>
+                        <div>
+                            <p class="font-bold text-white">${escapeHtml(item.name)}</p>
+                            <p class="text-[10px] text-gray-400">${item.solved} Çözülen Vaka • ${item.wrong} Yanlış</p>
+                        </div>
+                    </div>
+                    <span class="px-2.5 py-1 rounded-lg bg-amber-950/60 border border-council-gold/40 text-council-gold font-bold">
+                        ${item.points} Puan
+                    </span>
+                `;
+                list.appendChild(row);
+            });
+        }
+
+        // --- SAYFA 1: KONSEY MASASI ---
+        function renderMasaPage() {
+            const grid = document.getElementById('membersGrid');
+            if (!grid) return;
+            grid.innerHTML = '';
+
+            (councilState.members || []).forEach(m => {
+                const isBaronRole = m.role === 'Baron';
+                const card = document.createElement('div');
+                card.className = `rounded-2xl p-5 bg-council-card transition relative flex flex-col justify-between ${isBaronRole ? 'baron-border' : 'gold-border'}`;
+
+                const avatarIcon = isBaronRole ? '👑' : (m.name.toLowerCase().includes('heisenberg') ? '🧪' : '🐺');
+
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-start justify-between gap-3 mb-3">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 rounded-xl ${isBaronRole ? 'bg-amber-950/80 border-2 border-council-gold' : 'bg-red-950/60 border border-council-gold/40'} flex items-center justify-center text-2xl shadow-md">
+                                    ${avatarIcon}
+                                </div>
+                                <div>
+                                    <div class="flex items-center gap-2">
+                                        <h3 class="font-cinzel font-bold text-base text-white">${escapeHtml(m.name)}</h3>
+                                        <span class="px-2 py-0.5 text-[10px] font-black uppercase rounded ${isBaronRole ? 'bg-council-gold text-black' : 'bg-red-950 text-red-300 border border-red-800'}">
+                                            ${escapeHtml(m.role)}
+                                        </span>
+                                    </div>
+                                    <p class="text-xs text-council-gold font-medium mt-0.5">${escapeHtml(m.rank)}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2 text-xs text-gray-300 mt-3 pt-3 border-t border-gray-800/80">
+                            <p><span class="text-gray-500 font-semibold">Uzmanlık:</span> ${escapeHtml(m.specialty || 'Belirtilmedi')}</p>
+                            <p class="italic text-gray-400 bg-black/50 p-2.5 rounded-xl border border-gray-800/70">"${escapeHtml(m.status || 'Masada hazır.')}"</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 pt-3 border-t border-gray-800/80">
+                        <div class="flex items-center justify-between text-xs mb-1.5">
+                            <span class="text-gray-400 font-semibold">Konsey Sadakati</span>
+                            <span class="text-council-gold font-bold">%${m.loyalty ?? 100}</span>
+                        </div>
+                        <div class="w-full h-2 rounded-full bg-black overflow-hidden border border-gray-800">
+                            <div class="h-full bg-gradient-to-r from-red-700 via-amber-500 to-yellow-400" style="width: ${Math.min(100, Math.max(0, m.loyalty ?? 100))}%"></div>
+                        </div>
+                        ${isBaron() ? `
+                        <div class="flex items-center justify-end gap-1.5 mt-3">
+                            <button data-loyalty-id="${m.id}" data-delta="-5" class="px-2.5 py-1 rounded-lg bg-red-950/70 hover:bg-red-900 text-red-300 text-[11px] font-bold transition">-5 Sadakat</button>
+                            <button data-loyalty-id="${m.id}" data-delta="5" class="px-2.5 py-1 rounded-lg bg-emerald-950/70 hover:bg-emerald-900 text-emerald-300 text-[11px] font-bold transition">+5 Sadakat</button>
+                        </div>
+                        ` : ''}
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+
+            grid.querySelectorAll('[data-loyalty-id]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const id = btn.getAttribute('data-loyalty-id');
+                    const delta = parseInt(btn.getAttribute('data-delta'), 10);
+                    changeLoyalty(id, delta);
+                });
+            });
+        }
+
+        async function changeLoyalty(memberId, delta) {
+            if (!isBaron()) return;
+            const mem = councilState.members.find(m => m.id === memberId);
+            if (!mem) return;
+            mem.loyalty = Math.min(100, Math.max(0, (mem.loyalty || 100) + delta));
+            playCouncilSound('click');
+            await persistState(`${mem.name} sadakat puanı güncellendi: %${mem.loyalty}`);
+        }
+
+        // --- SAYFA 2: OYLAMA ODASI ---
+        function renderPollsPage() {
+            const grid = document.getElementById('pollsGrid');
+            if (!grid) return;
+            grid.innerHTML = '';
+
+            (councilState.polls || []).forEach(p => {
+                const yesCount = (p.yesVotes || []).length;
+                const noCount = (p.noVotes || []).length;
+                const total = yesCount + noCount;
+                const yesPct = total > 0 ? Math.round((yesCount / total) * 100) : 50;
+
+                const card = document.createElement('div');
+                card.className = 'bg-council-card rounded-2xl p-5 gold-border flex flex-col justify-between space-y-4';
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-2">
+                            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-red-950 text-council-gold border border-council-gold/30">
+                                ${escapeHtml(p.category)}
+                            </span>
+                            <div class="flex items-center gap-2">
+                                <span class="text-[11px] text-gray-500">Soruyu Açan: <strong class="text-gray-300">${escapeHtml(p.creator)}</strong></span>
+                                ${isBaron() ? `<button data-del-poll="${p.id}" class="text-gray-500 hover:text-red-400 text-xs" title="Oylamayı Sil"><i class="fa-solid fa-trash"></i></button>` : ''}
+                            </div>
+                        </div>
+                        <h3 class="font-cinzel text-base font-bold text-white mb-1">${escapeHtml(p.title)}</h3>
+                        <p class="text-xs text-gray-400">${escapeHtml(p.desc || '')}</p>
+                    </div>
+
+                    <div class="space-y-3 pt-2 border-t border-gray-800">
+                        <div class="w-full h-2.5 rounded-full bg-red-950 overflow-hidden flex">
+                            <div class="bg-emerald-500 h-full transition-all" style="width: ${total === 0 ? 50 : yesPct}%"></div>
+                        </div>
+                        <div class="flex items-center justify-between text-[11px] text-gray-400">
+                            <span class="text-emerald-400 font-bold">👍 Onay (${yesCount}): ${(p.yesVotes || []).map(escapeHtml).join(', ') || '-'}</span>
+                            <span class="text-red-400 font-bold">👎 Veto (${noCount}): ${(p.noVotes || []).map(escapeHtml).join(', ') || '-'}</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 pt-1">
+                            <button data-vote-id="${p.id}" data-vote-type="yes" class="py-2 rounded-xl bg-emerald-950/70 hover:bg-emerald-900 border border-emerald-700/50 text-emerald-300 text-xs font-bold transition">
+                                <i class="fa-solid fa-check mr-1"></i> ONAYLA
+                            </button>
+                            <button data-vote-id="${p.id}" data-vote-type="no" class="py-2 rounded-xl bg-red-950/70 hover:bg-red-900 border border-red-700/50 text-red-300 text-xs font-bold transition">
+                                <i class="fa-solid fa-xmark mr-1"></i> VETO ET
+                            </button>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+
+            grid.querySelectorAll('[data-vote-id]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    voteOnPoll(btn.getAttribute('data-vote-id'), btn.getAttribute('data-vote-type'));
+                });
+            });
+
+            grid.querySelectorAll('[data-del-poll]').forEach(btn => {
+                btn.addEventListener('click', async () => {
+                    const id = btn.getAttribute('data-del-poll');
+                    councilState.polls = councilState.polls.filter(x => x.id !== id);
+                    await persistState("Oylama konsey arşivinden silindi.");
+                });
+            });
+        }
+
+        async function voteOnPoll(pollId, voteType) {
+            if (!loggedInMember) return;
+            const poll = councilState.polls.find(p => p.id === pollId);
+            if (!poll) return;
+
+            const uName = loggedInMember.name;
+            poll.yesVotes = (poll.yesVotes || []).filter(n => n !== uName);
+            poll.noVotes = (poll.noVotes || []).filter(n => n !== uName);
+
+            if (voteType === 'yes') {
+                poll.yesVotes.push(uName);
+            } else {
+                poll.noVotes.push(uName);
+            }
+
+            playCouncilSound('gavel');
+            await persistState(`Oyun mühürlendi: ${uName}`);
+        }
+
+        // --- SAYFA 3: RACON & CEZA ---
+        function renderRaconAndBountiesPage() {
+            const qGrid = document.getElementById('quotesGrid');
+            const bGrid = document.getElementById('bountiesGrid');
+            if (!qGrid || !bGrid) return;
+
+            qGrid.innerHTML = '';
+            (councilState.quotes || []).forEach(q => {
+                const item = document.createElement('div');
+                item.className = 'p-4 rounded-2xl bg-council-card gold-border space-y-2';
+                item.innerHTML = `
+                    <p class="text-sm text-white italic font-medium">"${escapeHtml(q.text)}"</p>
+                    <div class="flex items-center justify-between text-xs pt-2 border-t border-gray-800/80">
+                        <span class="text-council-gold font-bold">— ${escapeHtml(q.author)}</span>
+                        <div class="flex items-center gap-2">
+                            <button data-like-quote="${q.id}" class="px-2.5 py-1 rounded-lg bg-black hover:bg-gray-900 border border-gray-800 text-amber-400 text-xs font-bold transition">
+                                🔥 Saygı (${q.likes || 0})
+                            </button>
+                            ${isBaron() ? `<button data-del-quote="${q.id}" class="text-gray-500 hover:text-red-400 text-xs"><i class="fa-solid fa-trash"></i></button>` : ''}
+                        </div>
+                    </div>
+                `;
+                qGrid.appendChild(item);
+            });
+
+            qGrid.querySelectorAll('[data-like-quote]').forEach(btn => {
+                btn.addEventListener('click', async () => {
+                    const q = councilState.quotes.find(x => x.id === btn.getAttribute('data-like-quote'));
+                    if (q) {
+                        q.likes = (q.likes || 0) + 1;
+                        playCouncilSound('click');
+                        await persistState();
+                    }
+                });
+            });
+
+            qGrid.querySelectorAll('[data-del-quote]').forEach(btn => {
+                btn.addEventListener('click', async () => {
+                    const id = btn.getAttribute('data-del-quote');
+                    councilState.quotes = councilState.quotes.filter(x => x.id !== id);
+                    await persistState("Racon sözü silindi.");
+                });
+            });
+
+            bGrid.innerHTML = '';
+            (councilState.bounties || []).forEach(b => {
+                const item = document.createElement('div');
+                item.className = 'p-4 rounded-2xl bg-council-card border border-red-900/60 space-y-2';
+                item.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-black uppercase tracking-wider text-red-400 flex items-center gap-1.5">
+                            <i class="fa-solid fa-crosshairs"></i> HEDEF: ${escapeHtml(b.target)}
+                        </span>
+                        <div class="flex items-center gap-2">
+                            <span class="px-2 py-0.5 rounded text-[10px] font-bold ${b.status === 'Aktif' ? 'bg-red-950 text-red-300 border border-red-700' : 'bg-emerald-950 text-emerald-300'}">${escapeHtml(b.status)}</span>
+                            ${isBaron() ? `<button data-del-bounty="${b.id}" class="text-gray-500 hover:text-red-400 text-xs"><i class="fa-solid fa-trash"></i></button>` : ''}
+                        </div>
+                    </div>
+                    <p class="text-xs text-gray-300"><strong>Suçu:</strong> ${escapeHtml(b.reason)}</p>
+                    <p class="text-xs text-council-gold font-semibold"><strong>Kesilen Bedel:</strong> ${escapeHtml(b.reward)}</p>
+                `;
+                bGrid.appendChild(item);
+            });
+
+            bGrid.querySelectorAll('[data-del-bounty]').forEach(btn => {
+                btn.addEventListener('click', async () => {
+                    const id = btn.getAttribute('data-del-bounty');
+                    councilState.bounties = councilState.bounties.filter(x => x.id !== id);
+                    await persistState("Ceza kaydı silindi.");
+                });
+            });
+        }
+
+        // --- SAYFA 4: GİZLİ SOHBET HATTI ---
+        function renderChatPage() {
+            const box = document.getElementById('chatMessagesBox');
+            if (!box) return;
+            box.innerHTML = '';
+
+            (councilState.chats || []).forEach(c => {
+                const isMe = loggedInMember && c.sender === loggedInMember.name;
+                const isSenderBaron = c.role === 'Baron';
+                const msgDiv = document.createElement('div');
+                msgDiv.className = `flex flex-col ${isMe ? 'items-end' : 'items-start'}`;
+                msgDiv.innerHTML = `
+                    <div class="max-w-md rounded-2xl px-4 py-2.5 ${isSenderBaron ? 'bg-amber-950/50 border border-council-gold/50' : (isMe ? 'bg-red-950/60 border border-red-800/50' : 'bg-black/70 border border-gray-800')}">
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="text-xs font-bold ${isSenderBaron ? 'text-council-gold' : 'text-red-400'}">
+                                ${isSenderBaron ? '👑 ' : '🐺 '}${escapeHtml(c.sender)}
+                            </span>
+                            <span class="text-[10px] text-gray-500">${escapeHtml(c.time || '')}</span>
+                        </div>
+                        <p class="text-xs sm:text-sm text-gray-200 break-words">${escapeHtml(c.text)}</p>
+                    </div>
+                `;
+                box.appendChild(msgDiv);
+            });
+            box.scrollTop = box.scrollHeight;
+        }
+
+        document.getElementById('chatForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!loggedInMember) return;
+            const inp = document.getElementById('chatInput');
+            const text = inp.value.trim();
+            if (!text) return;
+
+            const now = new Date();
+            const timeStr = now.toTimeString().slice(0, 5);
+
+            if (!Array.isArray(councilState.chats)) councilState.chats = [];
+            councilState.chats.push({
+                id: 'c-' + Date.now(),
+                sender: loggedInMember.name,
+                role: loggedInMember.role,
+                text,
+                time: timeStr
+            });
+
+            inp.value = '';
+            playCouncilSound('click');
+            await persistState();
+
+            // Eğer mesaj @müşavir veya @ai içeriyorsa otomatik olarak Gemini Başmüşavir yanıt versin
+            if (text.toLowerCase().includes('@müşavir') || text.toLowerCase().includes('@musavir') || text.toLowerCase().includes('@ai')) {
+                await askAiConsigliereFromChat(text);
+            }
+        });
+
+        window.clearAllChat = async function() {
+            if (!isBaron()) return;
+            councilState.chats = [{
+                id: 'c-' + Date.now(),
+                sender: loggedInMember.name,
+                role: 'Baron',
+                text: 'Konsey iletişim hattı Baron tarafından temizlendi.',
+                time: new Date().toTimeString().slice(0, 5)
+            }];
+            await persistState("Sohbet odası temizlendi.");
+        };
+
+        // --- SAYFA 5: BARON YÖNETİM ODASI (ŞİFRE & ÜYE YÖNETİMİ) ---
+        function renderBaronAdminPage() {
+            const table = document.getElementById('baronMembersTable');
+            const countBadge = document.getElementById('adminMemberCount');
+            if (!table) return;
+
+            const members = councilState.members || [];
+            if (countBadge) countBadge.innerText = `${members.length} Kayıtlı Üye`;
+
+            table.innerHTML = '';
+            members.forEach(m => {
+                const row = document.createElement('div');
+                row.className = 'p-4 rounded-xl bg-black/70 border border-gray-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3';
+                row.innerHTML = `
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-2">
+                            <span class="font-cinzel font-bold text-sm text-white">${m.role === 'Baron' ? '👑' : '🐺'} ${escapeHtml(m.name)}</span>
+                            <span class="px-2 py-0.5 rounded text-[10px] font-bold ${m.role === 'Baron' ? 'bg-council-gold text-black' : 'bg-gray-800 text-gray-300'}">${escapeHtml(m.role)}</span>
+                        </div>
+                        <p class="text-xs text-gray-400">Rütbe: ${escapeHtml(m.rank)}</p>
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-2">
+                        <div>
+                            <label class="block text-[10px] text-gray-500 uppercase">Giriş Şifresi</label>
+                            <input type="text" id="pass-inp-${m.id}" value="${escapeHtml(m.password)}" 
+                                class="w-28 px-2.5 py-1.5 rounded-lg bg-council-dark border border-gray-700 text-xs text-council-gold font-mono outline-none focus:border-council-gold">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] text-gray-500 uppercase">Rütbe / Unvan</label>
+                            <input type="text" id="rank-inp-${m.id}" value="${escapeHtml(m.rank)}" 
+                                class="w-36 px-2.5 py-1.5 rounded-lg bg-council-dark border border-gray-700 text-xs text-white outline-none focus:border-council-gold">
+                        </div>
+                        <div class="pt-3.5 flex items-center gap-1.5">
+                            <button data-save-mem="${m.id}" class="px-3 py-1.5 rounded-lg bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-bold transition">
+                                <i class="fa-solid fa-floppy-disk mr-1"></i>Kaydet
+                            </button>
+                            ${m.id !== 'mem-baron' ? `
+                            <button data-del-mem="${m.id}" class="px-2.5 py-1.5 rounded-lg bg-red-900/80 hover:bg-red-700 text-red-200 text-xs font-bold transition" title="Konseyden İhraç Et">
+                                <i class="fa-solid fa-user-slash"></i>
+                            </button>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+                table.appendChild(row);
+            });
+
+            table.querySelectorAll('[data-save-mem]').forEach(btn => {
+                btn.addEventListener('click', async () => {
+                    if (!isBaron()) return;
+                    const id = btn.getAttribute('data-save-mem');
+                    const mem = councilState.members.find(x => x.id === id);
+                    if (!mem) return;
+                    const newPass = document.getElementById(`pass-inp-${id}`).value.trim();
+                    const newRank = document.getElementById(`rank-inp-${id}`).value.trim();
+                    if (!newPass) {
+                        showToast("Şifre alanı boş bırakılamaz!", "Hata");
+                        return;
+                    }
+                    mem.password = newPass;
+                    if (newRank) mem.rank = newRank;
+                    playCouncilSound('gavel');
+                    await persistState(`${mem.name} şifre ve rütbe bilgileri kaydedildi!`);
+                });
+            });
+
+            table.querySelectorAll('[data-del-mem]').forEach(btn => {
+                btn.addEventListener('click', async () => {
+                    if (!isBaron()) return;
+                    const id = btn.getAttribute('data-del-mem');
+                    const target = councilState.members.find(x => x.id === id);
+                    if (!target) return;
+                    councilState.members = councilState.members.filter(x => x.id !== id);
+                    playCouncilSound('gavel');
+                    await persistState(`${target.name} konseyden ihraç edildi!`);
+                });
+            });
+        }
+
+        // Yeni Üye Ekleme Formu (Baron)
+        document.getElementById('baronAddMemberForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!isBaron()) return;
+
+            const name = document.getElementById('newMemUsername').value.trim();
+            const password = document.getElementById('newMemPassword').value.trim();
+            const rank = document.getElementById('newMemRank').value.trim() || 'Konsey Üyesi';
+            const role = document.getElementById('newMemRole').value;
+            const specialty = document.getElementById('newMemSpec').value.trim() || 'Operasyon Üyesi';
+
+            if (!name || !password) return;
+
+            const exists = councilState.members.some(m => m.name.toLowerCase() === name.toLowerCase());
+            if (exists) {
+                showToast("Bu isimde bir konsey üyesi zaten var!", "Uyarı");
+                return;
+            }
+
+            councilState.members.push({
+                id: 'mem-' + Date.now(),
+                name,
+                password,
+                role,
+                rank,
+                loyalty: 90,
+                specialty,
+                status: 'Yeni konsey üyesi masaya katıldı.'
+            });
+
+            e.target.reset();
+            playCouncilSound('gavel');
+            await persistState(`${name} konseye eklendi ve şifresi tanımlandı!`);
+        });
+
+        window.resetToFactoryDefaults = async function() {
+            if (!isBaron()) return;
+            councilState = getInitialDefaultState();
+            playCouncilSound('gavel');
+            await persistState("Konsey verileri fabrika ayarlarına sıfırlandı.");
+        };
+
+        // --- MODALLAR VE FORM İŞLEMLERİ ---
+        window.openModal = function(modalId) {
+            const m = document.getElementById(modalId);
+            if (!m) return;
+            if (modalId === 'decreeModal') {
+                document.getElementById('decreeInput').value = councilState.decree || '';
+            }
+            m.classList.remove('hidden');
+            m.classList.add('flex');
+        };
+
+        window.closeModal = function(modalId) {
+            const m = document.getElementById(modalId);
+            if (!m) return;
+            m.classList.add('hidden');
+            m.classList.remove('flex');
+        };
+
+        window.openStatusModal = function() {
+            if (!loggedInMember) return;
+            document.getElementById('myStatusInput').value = loggedInMember.status || '';
+            document.getElementById('mySpecInput').value = loggedInMember.specialty || '';
+            openModal('statusModal');
+        };
+
+        document.getElementById('decreeForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!isBaron()) return;
+            councilState.decree = document.getElementById('decreeInput').value.trim();
+            closeModal('decreeModal');
+            playCouncilSound('gavel');
+            await persistState("Baron'un yeni fermanı yayınlandı!");
+        });
+
+        document.getElementById('statusForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!loggedInMember) return;
+            const mem = councilState.members.find(m => m.id === loggedInMember.id);
+            if (mem) {
+                mem.status = document.getElementById('myStatusInput').value.trim();
+                mem.specialty = document.getElementById('mySpecInput').value.trim();
+                loggedInMember = mem;
+            }
+            closeModal('statusModal');
+            await persistState("Durum mesajın güncellendi!");
+        });
+
+        document.getElementById('pollForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!loggedInMember) return;
+            councilState.polls.unshift({
+                id: 'poll-' + Date.now(),
+                title: document.getElementById('pollTitle').value.trim(),
+                category: document.getElementById('pollCategory').value,
+                desc: document.getElementById('pollDesc').value.trim(),
+                creator: loggedInMember.name,
+                yesVotes: [loggedInMember.name],
+                noVotes: []
+            });
+            e.target.reset();
+            closeModal('pollModal');
+            playCouncilSound('gavel');
+            await persistState("Yeni oylama konseye sunuldu!");
+        });
+
+        document.getElementById('quoteForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!loggedInMember) return;
+            councilState.quotes.unshift({
+                id: 'q-' + Date.now(),
+                text: document.getElementById('quoteText').value.trim(),
+                author: loggedInMember.name,
+                likes: 1
+            });
+            e.target.reset();
+            closeModal('quoteModal');
+            await persistState("Yeni racon anayasaya eklendi!");
+        });
+
+        document.getElementById('bountyForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!loggedInMember) return;
+            councilState.bounties.unshift({
+                id: 'b-' + Date.now(),
+                target: document.getElementById('bountyTarget').value.trim(),
+                reason: document.getElementById('bountyReason').value.trim(),
+                reward: document.getElementById('bountyReward').value.trim(),
+                status: 'Aktif',
+                assignedBy: loggedInMember.name
+            });
+            e.target.reset();
+            closeModal('bountyModal');
+            playCouncilSound('gavel');
+            await persistState("Ceza kesildi ve kara listeye eklendi!");
+        });
+
+        // Başlangıç Yüklemesi
+        window.onload = function() {
+            renderLoginHelperButtons();
+            syncActiveUserWithState();
+            renderAll();
+            initFirebaseSync();
+            if (loggedInMember) {
+                initVoicePeerSystem();
+            }
+        };
+    </script>
+</body>
+</html>
